@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.pyc
+
+# KiCad: lokale Ansichtseinstellungen und Sicherungen
+*.kicad_prl
+*-backups/
+fp-info-cache
+\#auto_saved_files#
+
+# FreeCAD-Live-Ansicht: Laufzeitdateien, Prüfbilder und Texturen
+# (Modultextur stammt aus einem Händlerfoto und wird nicht veröffentlicht)
+Einstrahlungssensor-Gehäuse/Live-Ansicht/
+Einstrahlungssensor-Gehäuse/pruefung-inhalt.stl
+*.FCBak
+
+# Lokaler Bauzettel mit Einkaufslinks und Pfaden
+einstrahlungssensor.html
