@@ -46,6 +46,7 @@ os.makedirs(LIVE, exist_ok=True)
 EXPLOSION = 95.0       # Deckel über dem Unterteil: in der ISO-Ansicht berühren sich Deckel-
                         # vorderkante und Gehäusehinterkante bei 74,5 – etwas Luft; 0 = geschlossen
 RUHE = 2.0              # Sekunden ohne Dateiänderung vor dem Neubau
+LINIENBREITE = 1.0      # Kantenbreite in Pixeln für alle Teile
 FARBEN = {"Unterteil": (0.80, 0.80, 0.78), "Deckel": (0.80, 0.80, 0.78),
           "Solarmodule": (0.07, 0.07, 0.08), "Inhalt": (0.15, 0.55, 0.25),
           "Kleber": (0.04, 0.04, 0.04), "Dichtring": (0.06, 0.06, 0.06),
@@ -581,6 +582,9 @@ def neu_bauen():
                 setze(doc, name, form)
 
         doc.recompute()
+        for o in doc.Objects:                       # Kanten dünn („Flache Linien“), FreeCAD-Vorgabe ist 2 px
+            if o.ViewObject is not None and hasattr(o.ViewObject, "LineWidth") and o.ViewObject.LineWidth != LINIENBREITE:
+                o.ViewObject.LineWidth = LINIENBREITE
         if zustand["erstmals"]:
             Gui.ActiveDocument.ActiveView.viewIsometric()
             Gui.SendMsgToActiveView("ViewFit")
