@@ -196,6 +196,8 @@ Das Skript gibt beim Bauen die wichtigsten Kontrollmaße aus: Gewindeeingriff, W
 
 `live_ansicht.py`, `live_uebernehmen.sh` und `live_befehl.sh` sind ein Hilfsmittel zum gemeinsamen Konstruieren: Das Makro läuft in der FreeCAD-Oberfläche, baut das Modell neu, sobald sich das Skript ändert, und zeigt Platine, Kabel, Schrauben und Module mit. Die Texturen dafür liegen im Ordner `Live-Ansicht/`, der nicht im Repository ist. Die Moduloberfläche erzeugt `erzeuge_modultextur.py`, die Platinenbilder kommen von `platine_ansicht_daten.py`. Für den Nachbau braucht man das alles nicht.
 
+Zum Anschauen gibt es die Baugruppe als FreeCAD-Datei: `Gehäuse mit Einbauteilen offen.FCStd` und `… geschlossen.FCStd` zeigen das Gehäuse mit allen Einbauteilen am Paneelrahmen; `Gehäuse mit Einbauteilen.FCStd` ist ein älterer Stand ohne Lasche und Gewindeeinsätze. In „offen“ und „geschlossen“ sind die Bilder von Solarmodulen, Platine, Funkmodul und Druckausgleich eingebettet. FreeCAD 1.1 zeichnet Bilder auf Part-Objekten aber nicht selbst, darum legt das Hilfsobjekt `Texturen` sie beim Öffnen auf. Dafür muss `pv_textur.py` für FreeCAD importierbar sein, z. B. als Verknüpfung in einem Unterordner von `Mod/` in den FreeCAD-Benutzerdaten (den Pfad nennt `App.getUserAppDataDir()`, beim Snap `~/snap/freecad/common/`). Ohne das Modul öffnen sich die Dateien trotzdem, die Bildflächen bleiben dann grau.
+
 ### Drucken
 
 - **Material: PETG** in heller Farbe. Kein PLA, es wird ab etwa 55 °C weich: Die beiden schwarzen Solarzellen im eigenen Deckel heizen sich in der Sommersonne auf 60 °C und mehr auf, und das Gehäuse liegt zusätzlich direkt am Rahmen des PV-Paneels, der ebenso heiß wird. ASA wäre UV-fester, verzieht sich auf einem offenen Drucker bei 16 cm Länge aber leicht.
@@ -369,6 +371,8 @@ Beide nutzen das europäische Band für Kurzstreckenfunk (863–870 MHz). Das du
 │   ├── pruefe_gehaeuse.py          Passungsprüfung
 │   ├── vorschau.py                 Vorschaubilder ohne OpenGL
 │   ├── beschrifte_montagebild.py   Pfeil und Text ins Montagebild
+│   ├── Gehäuse mit Einbauteilen offen/geschlossen.FCStd   Baugruppe zum Anschauen
+│   ├── pv_textur.py                legt die Bildflächen der Baugruppe beim Öffnen auf
 │   ├── live_ansicht.py, live_uebernehmen.sh, live_befehl.sh,
 │   │   platine_ansicht_daten.py, erzeuge_modultextur.py   Live-Ansicht (optional)
 │   └── Bilder/
