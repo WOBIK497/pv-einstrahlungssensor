@@ -296,7 +296,7 @@ Folgendes ist bisher nur aus Datenblättern und Quelltext abgeleitet. Deshalb zu
 - **Bestückung:** Sitzen D1 und D2 richtig herum? Höchstens 4,9 V am Kondensator, 3,3 V an J4?
 - **Stecker:** Passen die Modulstecker in die HC-ZH-Buchsen, und auf welcher Seite liegt Rot?
 - **Gehäuse:** Moduldicke, Kondensatormaße und Druckausgleichselement nachmessen. Die Tasche ist für ein Element mit 10 mm Gewinde und 9 mm Kopf ausgelegt, das JDAE12 hat laut Datenblatt vermutlich nur 6 mm Gewinde. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht?
-- **Befestigung:** Passt das Paneel zum Datenblatt JAM60D41 (Rahmen 30 mm hoch, Flansch 28 mm), trifft das Langloch das Montageloch, liegt der Deckel bündig? Die Flanschdicke ist mit 2 mm angenommen, M6 × 16 reicht bis etwa 4 mm.
+- **Befestigung:** Passt das Paneel zum Datenblatt JAM60D41 (Rahmen 30 mm hoch, Flansch 28 mm), trifft das Langloch das Montageloch, liegt der Deckel bündig? Die Flanschdicke ist aus der maßstabsgetreuen Profilzeichnung im Datenblatt ausgemessen (≈ 1,7 mm), M6 × 16 reicht bis etwa 4 mm.
 - **Empfang:** Hört ein Bluetooth-Proxy den Sensor am Montageort zuverlässig?
 - **Nacht:** Wie weit sinkt die Kondensatorspannung bis zum Morgen (Leckstrom)?
 - **Web Bluetooth:** Klappt die Verbindung vom Linux-Rechner oder nur vom Android-Gerät?

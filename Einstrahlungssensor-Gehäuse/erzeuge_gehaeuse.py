@@ -105,10 +105,12 @@ DAE_DOM_D = 26.0          # 2,5 mm Wand um die Tasche
 # Die Gehäusewand liegt direkt an der Rahmenaußenfläche (HALTER_SPALT = 0): sie
 # nimmt das Hangabtriebsgewicht auf und sperrt auf ganzer Länge das Verdrehen um
 # die einzelne Schraube. Mit Spalt > 0 füllt ihn eine Anschlagleiste am Halter.
-RAHMEN_H = 30.0           # Rahmenhöhe (Datenblatt)
-RAHMEN_FLANSCH = 28.0     # Fußflansch nach innen unter das Modul (Datenblatt, gemessen)
-RAHMEN_FLANSCH_D = 2.0    # Flanschdicke angenommen – geht nur in die Schraubenlänge ein
-MONTAGELOCH_ABSTAND = 19.0     # Lochmitte ab Außenfläche des Rahmens (gemessen, ca.)
+RAHMEN_H = 30.0           # Rahmenhöhe (Datenblatt; am Paneel gemessen 29,9)
+RAHMEN_FLANSCH = 28.0     # Fußflansch nach innen unter das Modul (Datenblatt, nicht messbar)
+RAHMEN_FLANSCH_D = 1.7    # Flanschdicke aus der Profilzeichnung im Datenblatt ausgemessen
+                          # (maßstabsgetreu, ±0,2) – geht nur in die Schraubenlänge ein
+MONTAGELOCH_ABSTAND = 19.0     # Lochmitte ab Außenfläche des Rahmens: Datenblatt,
+                               # (Breite 1134 − Lochabstand 1096) / 2
 HALTER_D = 5.0            # Plattendicke unter dem Gehäuse
 HALTER_PLATTE = (116.0, 66.0)   # Platte um die M4-Einsätze, frei von den Deckelschrauben
 HALTER_ARM_B = 36.0       # Armbreite, frei von den mittleren Deckelschrauben (x ±24,9)
