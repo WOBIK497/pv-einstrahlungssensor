@@ -9,7 +9,7 @@ Ein kabelloser Sensor, der die Sonneneinstrahlung **in der Ebene einer PV-Fläch
 
 > **Stand: Entwurf (November 2026).** Platine, Gehäuse und Programm sind fertig konstruiert und rechnerisch geprüft, aber **noch nicht gebaut**. Was am ersten Exemplar zu prüfen ist, steht unter [Offene Punkte](#offene-punkte). Nachbau auf eigenes Risiko.
 
-**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric FreeCAD enclosure (PETG, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. Documentation is in German.
+**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric FreeCAD enclosure (PETG, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. A section compares other radio links (Wi-Fi, Zigbee, 868 MHz GFSK and LoRa) for larger rooftop arrays without a Bluetooth receiver nearby. Documentation is in German.
 
 ---
 
@@ -28,6 +28,7 @@ Ein kabelloser Sensor, der die Sonneneinstrahlung **in der Ebene einer PV-Fläch
 - [Aufbau und Montage](#aufbau-und-montage)
 - [Offene Punkte](#offene-punkte)
 - [Warum so und nicht anders](#warum-so-und-nicht-anders)
+- [Andere Funkwege](#andere-funkwege)
 - [Ordnerstruktur](#ordnerstruktur)
 - [Lizenz](#lizenz)
 
@@ -308,8 +309,48 @@ Folgendes ist bisher nur aus Datenblättern und Quelltext abgeleitet. Deshalb zu
 - **Espruino statt ESPHome:** ESPHome kann BTHome nur empfangen, nicht senden. Der Vorschlag, das Senden einzubauen ([esphome/esphome#14472](https://github.com/esphome/esphome/pull/14472)), wurde im Oktober 2026 ohne Übernahme geschlossen. Espruino bringt eine fertige [BTHome-Bibliothek](https://www.espruino.com/BTHome) mit, das Programm ist ein paar Zeilen JavaScript und lässt sich per Bluetooth ändern.
 - **Eigene Platine statt Breakout auf Lochraster:** kleiner, robuster und kaum teurer, weil JLCPCB alles außer dem Funkmodul und den Buchsen bestückt.
 - **Superkondensator statt Akku:** keine Alterung durch Ladezyklen, kein Problem mit Frost oder Hitze unter dem Modul.
-- **Variante mit externer Stromversorgung:** Liegt am Montageort Strom an, wäre nur ein Modul nötig, nämlich das Messmodul. Versorgungsmodul, 5-V-Regler und Superkondensator entfallen, und das Gehäuse wäre nur halb so groß. Dadurch wäre auch WLAN (z. B. mit ESPHome) oder Zigbee2MQTT möglich, weil der höhere Stromverbrauch dann keine Rolle spielt.
+- **Variante mit externer Stromversorgung:** Liegt am Montageort Strom an, wäre nur ein Modul nötig, nämlich das Messmodul. Versorgungsmodul, 5-V-Regler und Superkondensator entfallen, und das Gehäuse wäre nur halb so groß. Dadurch wäre auch WLAN (z. B. mit ESPHome) oder Zigbee2MQTT möglich, weil der höhere Stromverbrauch dann keine Rolle spielt (siehe [Andere Funkwege](#andere-funkwege)).
 - **Verworfen:** Lux-Sensoren (enden bei etwa 83.000 lx und messen Lux statt W/m²), Industrie-Einstrahlungssensoren (450–700 € pro Stück). Ein Silizium-Pyranometer mit RS485 (z. B. PYR20, ca. 60 €) wäre die fertige Alternative, braucht aber Kabel. Fertige BTHome-Geräte mit freiem Analogeingang gibt es meines Wissens nicht.
+
+## Andere Funkwege
+
+Dieser Sensor bleibt bei Bluetooth LE, weil am Balkon Shelly-Geräte als Empfänger in Reichweite sind. Bei größeren Dachanlagen ist das oft nicht so. Die Übersicht ist für alle, die den Sensor dafür abwandeln wollen. Alle Zahlen sind Überschläge aus Datenblättern, gemessen ist davon nichts.
+
+**Maßstab ist die Solarversorgung:** Das Versorgungsmodul liefert rund 0,14 mA je W/m², der Superkondensator gibt zwischen 4,7 und 2,0 V etwa 11 C ab. Damit er eine Winternacht von 15 Stunden überbrückt, darf der Sensor im Mittel höchstens etwa **0,2 mA** brauchen. Die Ströme unten beziehen sich auf den Kondensator. Der 3,3-V-Regler ist linear, es fließt also derselbe Strom hinein wie heraus.
+
+**Reichweite und Verbrauch**
+
+| Funkweg | Reichweite bei Sicht | Reichweite durchs Haus | Mittlerer Strom, ein Wert alle 3 s | Reicht die Solarversorgung? | Empfänger |
+|---|---|---|---|---|---|
+| Bluetooth LE (dieser Sensor) | 50–100 m | 10–20 m, ein bis zwei Wände | ≈ 40 µA | ja | Bluetooth-Proxy (Shelly, ESPHome) |
+| Zigbee | 50–100 m je Sprung | 10–20 m je Sprung, das Mesh verlängert | ≈ 50–100 µA (Schätzung) | ja | Koordinator mit Zigbee2MQTT oder ZHA |
+| WLAN | 50–100 m bis zum Zugangspunkt | 10–30 m | 20–80 mA, Spitzen über 300 mA | nein, nur mit Netzteil | keiner zusätzlich |
+| 868 MHz GFSK | 0,5–1 km | 50–150 m, mehrere Wände oder Decken | ≈ 0,1 mA | ja | eigener Empfänger (ESP32 + Funkmodul) |
+| 868 MHz LoRa | 2–5 km | einige hundert Meter | ≈ 0,8 mA | nur, wenn er nachts seltener sendet | eigener Empfänger oder LoRaWAN-Gateway |
+
+Die Reichweiten sind Erfahrungswerte für kleine Antennen und gelten nur grob. Stahlbeton, metallbedampftes Wärmeschutzglas und der Alurahmen des Paneels verkürzen sie stark, ein hoch montierter Sensor mit freier Sicht verlängert sie.
+
+**Vor- und Nachteile**
+
+| Funkweg | Vorteile | Nachteile |
+|---|---|---|
+| Bluetooth LE | Geringster Verbrauch. Vorhandene Bluetooth-Proxys empfangen die Werte, Home Assistant erkennt BTHome von selbst. Das Programm lässt sich per Web Bluetooth ändern. | Kurze Reichweite, schon ein Ziegeldach kostet viel. Keine Empfangsbestätigung, verlorene Pakete fallen nur als Lücken auf. BLE Long Range (Coded PHY) beherrscht das nRF52832 nicht, und die üblichen Proxys hören es auch nicht. Ausweg ohne Umbau: ein ESP32 mit ESPHome und LAN-Anschluss als Proxy nahe der Anlage, z. B. auf dem Dachboden. |
+| Zigbee | Mesh: Jedes netzbetriebene Zigbee-Gerät (Zwischensteckdose, Unterputzaktor) leitet weiter. Empfangsbestätigung und Wiederholung sind eingebaut. Als schlafendes Endgerät braucht der Sensor etwa so viel wie mit BLE. | Anderer Funkchip nötig (z. B. nRF52840, EFR32MG, ESP32-C6 oder -H2), das nRF52832 und Espruino können kein Zigbee. Ein selbst gebautes Gerät mit Analogwerten braucht in Zigbee2MQTT meist einen eigenen Converter. Je Sprung reicht es auf 2,4 GHz kaum weiter als BLE. |
+| WLAN | Kein zusätzlicher Empfänger, wenn das WLAN bis zur Anlage reicht. Mit ESPHome direkt in Home Assistant, Updates über das Netz. | Den Strom schaffen weder das Versorgungsmodul noch der 3,3-V-Regler (XC6206, höchstens 200 mA). Ohne Netzteil nur mit Tiefschlaf, größerem Kondensator und stärkerem Regler, dann aber nur alle paar Minuten ein Wert. Auf dem Dach ist oft kein WLAN. |
+| 868 MHz GFSK | Rund zehnmal so weit wie BLE bei kaum höherem Verbrauch: Ein Paket dauert bei 50 kbit/s etwa 4 ms und kostet ≈ 0,2 mC. Der 3-s-Takt hält auch nachts durch. Mit 0,13 % Sendezeit passt er in jeden Teilbereich des Bands. | Kein Standardprotokoll, Paketformat und Auswertung im Empfänger legt man selbst fest. Zusätzliches Funkmodul und eigener Empfänger. |
+| 868 MHz LoRa | Größte Reichweite, durchs Haus problemlos. Mit LoRaWAN über The Things Network ginge es ohne eigenen Empfänger, wenn ein Gateway in Reichweite ist. | Ein Paket dauert bei SF7 etwa 50 ms und kostet ≈ 2,3 mC, rund hundertmal so viel wie bei BLE. Nachts wäre der Kondensator nach knapp 4 Stunden leer, bei Dunkelheit (Shunt-Spannung nahe 0) also z. B. nur alle 10 Minuten senden. Der 3-s-Takt (1,7 % Sendezeit) ist nur im Bereich 869,40–869,65 MHz erlaubt. The Things Network erlaubt 30 s Sendezeit pro Tag, bei SF7 also etwa einen Wert alle drei Minuten. |
+
+### 868 MHz: Was GFSK und LoRa gemeinsam haben
+
+Beide nutzen das europäische Band für Kurzstreckenfunk (863–870 MHz). Das durchdringt Wände und Dächer besser als 2,4 GHz, und die Empfänger sind deutlich empfindlicher. Für beide gilt:
+
+- **Hardware:** ein Funkmodul mit SX1262 (z. B. Ebyte E22-900M22S, 14 × 20 mm) an SPI neben dem MDBT42Q. Bluetooth bleibt dann zum Programmieren erhalten. Einen fertigen Espruino-Treiber gibt es meines Wissens nur für den älteren SX127x (z. B. RFM95), für den SX1262 müsste man ihn selbst schreiben. Die Platine wird größer.
+- **Strom:** ≈ 45 mA beim Senden mit +14 dBm, im Schlaf unter 1 µA. Die Spitzen liefert der Superkondensator, der XC6206 schafft sie.
+- **Antenne:** Eine λ/4-Antenne ist etwa 8,6 cm lang. Eine Wendelantenne passt ins Gehäuse, PETG lässt die Funkwellen durch. Der Alurahmen direkt daneben verstimmt sie, das ist am Montageort zu prüfen. Eine Antenne außen wäre ein weiterer Durchbruch durch die Dichtung.
+- **Empfänger:** ein eigenes Gerät, z. B. ein ESP32-Board mit SX1262 (rund 20 €) mit ESPHome, das die Pakete auswertet und an Home Assistant weitergibt. Die automatische Erkennung wie bei BTHome entfällt.
+- **Funkregeln** (ETSI EN 300 220): Im Bereich 868,0–868,6 MHz darf ein Gerät höchstens 1 % der Zeit senden, im Bereich 869,40–869,65 MHz höchstens 10 %.
+
+**Fazit:** Für eine Dachanlage ohne Bluetooth-Empfänger in der Nähe ist **GFSK auf 868 MHz** der beste Kompromiss: deutlich mehr Reichweite bei kaum höherem Verbrauch, der 3-s-Takt bleibt. LoRa lohnt erst bei wirklich langen Strecken. Liegt an der Anlage ohnehin Strom an, sind ein Bluetooth-Proxy in der Nähe oder WLAN mit Netzteil am einfachsten.
 
 ## Ordnerstruktur
 
