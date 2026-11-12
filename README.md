@@ -134,11 +134,13 @@ Voraussetzung: KiCad 9 mit Python-Modul `pcbnew` und `kicad-cli` (getestet mit 9
 
 ### Bestellen bei JLCPCB
 
-1. `einstrahlungssensor-gerber.zip` hochladen. Die Vorgaben passen: 2 Lagen, 1,6 mm.
-2. „PCB Assembly“ einschalten, Seite „Top“, z. B. 3 von 5 Platinen bestücken.
-3. `jlcpcb-bom.csv` und `jlcpcb-cpl.csv` hochladen. Alle Teile haben LCSC-Nummern. J4, J5 und das Funkmodul fehlen mit Absicht.
-4. Die ZH-Buchsen J1–J3 sind Durchsteckteile und stehen nicht in der Stückliste. Du lötest sie selbst ein (HC-ZH1.5-2A, LCSC C2845550, am einfachsten gleich mitbestellen).
-5. **In der Bestückungsvorschau prüfen:** Polung von D1 (Kathodenstrich zu J3/C3) und D2, Lage von U1 und U2. JLCPCB dreht manche Bauteile anders als KiCad.
+1. `einstrahlungssensor-gerber.zip` hochladen. Die Vorgaben passen: 2 Lagen, 1,6 mm. Als Oberfläche **LeadFree HASL** statt OSP wählen, weil Funkmodul und Buchsen nach dem Reflow noch von Hand gelötet werden.
+2. „PCB Assembly“ einschalten: Economic, Seite „Top“, bis zu 5 Platinen bestücken, **Confirm Parts Placement = Yes**.
+3. `jlcpcb-bom.csv` und `jlcpcb-cpl.csv` hochladen (11 Positionen). Alle Teile haben LCSC-Nummern. J1–J5 und das Funkmodul fehlen mit Absicht.
+4. **In der Bestückungsvorschau prüfen:** Polung von D1 (Kathodenstrich zu J3/C3) und D2, Lage von U1 (Pin 1 links oben) und U2 (Pin 1 rechts unten). JLCPCB dreht manche Bauteile anders als KiCad; die CPL enthält dafür schon eine Drehkorrektur. Nach der Bestellung die Platzierung binnen 72 Stunden freigeben.
+5. Die ZH-Buchsen J1–J3 sind Durchsteckteile und stehen nicht in der Stückliste. Du lötest sie selbst ein und kaufst sie getrennt: JLCPCB verschickt keine losen Teile, was dort zusätzlich gekauft wird, bleibt im Teilelager für spätere Bestückungen.
+
+Bei der Bestellung (November 2026) fielen außerdem auf: JLCPCB setzt mit der Voreinstellung „Tooling holes: Added by JLCPCB“ zwei Werkzeuglöcher (Ø 1,15 mm, nicht durchkontaktiert) in die oberen Ecken. Sie liegen im kupferfreien Antennenstreifen und außerhalb der Schlitzhalter im Gehäuse und stören nicht. In die EU zieht der Versand „Global Standard Direct Line“ Einfuhrumsatzsteuer, EU-Zoll und EU-Bearbeitungsgebühr gleich mit ein; bei den Express-Diensten unter IOSS kommen Zoll und Gebühr erst bei der Zustellung dazu.
 
 | Bauteil | LCSC | Hinweis |
 |---|---|---|
@@ -146,7 +148,7 @@ Voraussetzung: KiCad 9 mit Python-Modul `pcbnew` und `kicad-cli` (getestet mit 9
 | XC6206P332MR, 3,3-V-Regler | C5446 | Pin 1 GND, 2 VOUT, 3 VIN (anders als der HT7550!) |
 | 10 Ω, 1 %, 2 W, 2512 (R1, R2) | C414890 | |
 | B5819WS Schottky (D1) | C7420331 | |
-| HC-ZH1.5-2A, stehend (J1–J3) | C2845550 | Durchsteckteil, Maße wie JST B2B-ZR, nicht in der Stückliste: selbst einlöten |
+| ZH-Buchse 2-polig, stehend (J1–J3) | – | Bauform JST B2B-ZR, nicht in der Stückliste: getrennt kaufen und selbst einlöten |
 | übrige R, C und LED | siehe BOM | Standardteile |
 
 ### Funkmodul und Buchsen auflöten
@@ -159,6 +161,8 @@ Das MDBT42Q lötest du ebenfalls selbst auf (Pads im Abstand von 0,7 mm an der K
 2. Eine Ecke heften, Lage prüfen, dann die gegenüberliegende Ecke, dann den Rest.
 3. Antenne zur Oberkante, Pad 1 (Markierung) oben links.
 4. Vor dem ersten Einschalten mit dem Multimeter prüfen, dass 3V3 und GND an J4 nicht kurzgeschlossen sind.
+
+Ohne Lötkolben geht es auch mit einer **Heizplatte** und Niedertemperatur-Lötpaste (Sn42Bi58, schmilzt bei 138 °C): Paste mit der Nadel auf die Pads, Modul auflegen, Platte auf etwa 170–180 °C. Die Lötstellen der JLCPCB-Bestückung (bleifrei, 217 °C) schmelzen dabei nicht, nichts verrutscht. Vorher einen Probelauf mit etwas Paste machen, weil die Anzeige der Platte mehr zeigt, als oben auf der Platine ankommt. Erst danach die ZH-Buchsen und J4 mit dem Lötkolben einlöten, die Buchsengehäuse nicht mit auf die Platte. Wismut-Lot ist etwas spröder als normales; für ein Modul mit vielen Pads im geschlossenen Gehäuse ist das vertretbar.
 
 ## Gehäuse
 
@@ -261,11 +265,10 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 | Teil | Menge | ca. Preis | Bezug |
 |---|---|---|---|
 | MDBT42Q-Modul mit Espruino (das nackte Modul, nicht das Breakout) | 1 | £12 | [Espruino-Shop](https://shop.espruino.com/mdbt42q-module) |
-| Leiterplatten, bestückt (JLCPCB fertigt mindestens 5, die übrigen bleiben Reserve) | 5 | 30–45 € (Schätzung) | JLCPCB |
-| ZH-Buchse 1,5 mm, 2-polig, stehend, HC-ZH1.5-2A (J1–J3) | 3 | < 1 € | LCSC C2845550, mit der Platine bestellen |
+| Leiterplatten, bestückt (JLCPCB fertigt mindestens 5) | 5 | ≈ 23 $ für alle fünf bestückt, mit Versand und Einfuhrabgaben nach Deutschland und Neukunden-Gutschein (November 2026) | JLCPCB |
+| ZH-1,5-Set: 2-polige Stecker mit Kabel und stehende Platinenbuchsen (Buchsen für J1–J3, ein Kabel für J3) | 1 Packung | ≈ 8 € | z. B. Amazon (Nachbau, Passung zu den Modulsteckern prüfen) |
 | ETFE-Solarmodul 0,8 W, 6 V, 70 × 70 × 2 mm, ZH-1,5-Stecker (1 × Messung, 1 × Versorgung) | 2 | 17–32 € | AliExpress |
 | Superkondensator 5,5 V / 4 F (Kombityp, zwei Zellen) | 1 | 3,50 € | AliExpress |
-| ZH-1,5-Kabel 2-polig, 10 cm, einseitig konfektioniert (für J3) | 1 Packung (10 Stück) | 1 € | AliExpress |
 | Druckausgleichselement M12 × 1,5, PA, PTFE-Membran, IP68 (z. B. Jacob JDAE12) | 1 | 3,25 € | Fachhandel |
 | O-Ring 148 × 2 mm, EPDM 70 | 1 | 4 € | Fachhandel |
 | Gewindeeinsätze M3 × 5,7 | 8 | | z. B. Ruthex |
@@ -275,7 +278,7 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 | Mutter M12 × 1,5 (Kunststoff), falls beim Druckausgleich keine dabei ist | 1 | | |
 | PETG | ≈ 120 g | | |
 
-Wer mehrere Sensoren baut, braucht alles außer den Leiterplatten und den ZH-Kabeln entsprechend öfter. Pro weiterem Sensor kommen so rund 50 € dazu. Die Messmodule sollten dann aus derselben Charge stammen (siehe [Abgleich](#abgleich)).
+Wer mehrere Sensoren baut, braucht alles außer den Leiterplatten und dem ZH-Set entsprechend öfter. Pro weiterem Sensor kommen so rund 50 € dazu. Die Messmodule sollten dann aus derselben Charge stammen (siehe [Abgleich](#abgleich)).
 
 Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch, wetterfester Kleb- und Dichtstoff auf MS-Polymer-Basis für die Module. Optional eine Stiftleiste für J4.
 
@@ -297,7 +300,7 @@ Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch,
 Folgendes ist bisher nur aus Datenblättern und Quelltext abgeleitet. Deshalb zuerst **ein** Exemplar bauen und in Betrieb nehmen:
 
 - **Bestückung:** Sitzen D1 und D2 richtig herum? Höchstens 4,9 V am Kondensator, 3,3 V an J4?
-- **Stecker:** Passen die Modulstecker in die HC-ZH-Buchsen, und auf welcher Seite liegt Rot?
+- **Stecker:** Passen die Modulstecker in die ZH-Buchsen, und auf welcher Seite liegt Rot?
 - **Gehäuse:** Moduldicke, Kondensatormaße und Druckausgleichselement nachmessen. Die Tasche ist für ein Element mit 10 mm Gewinde und 9 mm Kopf ausgelegt, das JDAE12 hat laut Datenblatt vermutlich nur 6 mm Gewinde. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht?
 - **Befestigung:** Passt das Paneel zum Datenblatt JAM60D41 (Rahmen 30 mm hoch, Flansch 28 mm), trifft das Langloch das Montageloch, liegt der Deckel bündig? Die Flanschdicke ist aus der maßstabsgetreuen Profilzeichnung im Datenblatt ausgemessen (≈ 1,7 mm), M6 × 16 reicht bis etwa 4 mm.
 - **Empfang:** Hört ein Bluetooth-Proxy den Sensor am Montageort zuverlässig?
