@@ -68,7 +68,7 @@ Ein zweites, baugleiches Modul lädt einen Superkondensator, aus dem das Funkmod
 | Messzelle | ETFE-Solarmodul 70 × 70 mm, 0,8 W, auf 10-Ω-Shunt |
 | Versorgung | zweites Modul → 5-V-Regler → Superkondensator 5,5 V / 4 F → 3,3 V |
 | Funk | BTHome v2 (Bluetooth LE Advertising), unverschlüsselt |
-| Funkmodul | Raytac MDBT42Q (nRF52832) mit vorinstalliertem Espruino |
+| Funkmodul | Raytac MDBT42Q-512KV2 (nRF52832), Espruino selbst per SWD aufgespielt |
 | Takt | messen alle 3 s, senden jede Sekunde |
 | Verbrauch | ≈ 40 µA im Mittel, Kondensator überbrückt ≈ 2 Tage Dunkelheit |
 | Kaltstart | ≈ 6 min bei bedecktem Himmel (200 W/m²) |
@@ -108,7 +108,7 @@ MDBT42Q (U3):  P0.00 (D0) Taster-Ersatz J5 · P0.01 (D1) LED D2 über R6 1 kΩ
 | J1 | + / −, ZH-Buchse 1,5 mm | Modul V (Versorgung), Stecker des Moduls direkt |
 | J2 | + / −, ZH-Buchse 1,5 mm | Modul M (Messung), Stecker des Moduls direkt |
 | J3 | + / −, ZH-Buchse 1,5 mm | Superkondensator über ein konfektioniertes ZH-Kabel |
-| J4 | GND, 3V3, SWDIO, SWDCLK, RX, TX | Notfall: serielle Konsole oder SWD-Programmer |
+| J4 | GND, 3V3, SWDIO, SWDCLK, RX, TX | Espruino aufspielen (SWD); im Notfall serielle Konsole |
 | J5 | D0 / 3V3 | Taster-Ersatz: beim Einschalten überbrücken, um gespeicherten Code zu umgehen |
 
 J4 und J5 sind Lötaugen im Raster 2,54 mm.
@@ -220,7 +220,17 @@ Zum Anschauen gibt es die Baugruppe als FreeCAD-Datei: `Gehäuse mit Einbauteile
 
 Espruino misst relativ zur Betriebsspannung. Das Programm rechnet deshalb mit `E.getAnalogVRef()` in Volt zurück. Für die anderen Sensoren änderst du nur `NAME` in der ersten Zeile.
 
-**Aufspielen** (per Bluetooth, auch wenn der Sensor schon montiert ist):
+**Espruino einmalig aufspielen.** Das nackte MDBT42Q kommt vom Distributor ohne Firmware. Espruino kommt deshalb einmal per SWD über J4 darauf, als Programmer dient ein Raspberry Pi Pico mit der Firmware [debugprobe](https://github.com/raspberrypi/debugprobe) (UF2-Datei per Drag-and-drop):
+
+1. Verdrahtung Pico → J4: GP2 → SWDCLK, GP3 → SWDIO, GND → GND. Solange der Superkondensator noch nicht eingesteckt ist, darf der Pico die Platine über 3V3 versorgen. Mit eingestecktem, geladenem Kondensator 3V3 **nicht** verbinden, sonst fließt Strom rückwärts durch den XC6206.
+2. Neue nRF52 sind oft per APPROTECT gesperrt. Erst entsperren (löscht den Chip):
+   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "init; nrf52_recover; exit"`
+3. Die `.hex`-Datei für das MDBT42Q von [espruino.com/Download](https://www.espruino.com/Download) aufspielen:
+   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "program <datei>.hex verify reset exit"`
+
+Ein ST-Link reicht dafür nicht: Er kann einen gesperrten nRF52 nicht entsperren. Der Pico bringt mit debugprobe außerdem eine serielle Schnittstelle mit (GP4 → RX, GP5 ← TX an J4), für die Espruino-Konsole mit 9600 Bd. Wer Espruino auf fremder Hardware nutzt, freut sich das Projekt über eine Spende.
+
+**Programm aufspielen** (per Bluetooth, auch wenn der Sensor schon montiert ist):
 
 1. Die [Espruino Web IDE](https://www.espruino.com/ide/) in Chrome öffnen. Unter Linux vorher in `chrome://flags` die „Experimental Web Platform Features“ einschalten. Von Android geht es ohne diesen Schritt.
 2. Kondensator laden lassen (oder kurz 3,3 V an J4 anlegen), mit dem Modul verbinden, Programm einfügen und hochladen.
@@ -264,7 +274,8 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 
 | Teil | Menge | ca. Preis | Bezug |
 |---|---|---|---|
-| MDBT42Q-Modul mit Espruino (das nackte Modul, nicht das Breakout) | 1 | £12 | [Espruino-Shop](https://shop.espruino.com/mdbt42q-module) |
+| Funkmodul Raytac MDBT42Q-512KV2 (nRF52832, 512 KB, Keramikantenne), ohne Firmware | 1 | ≈ 6 € | z. B. [TME](https://www.tme.eu/de/details/mdbt42q-512kv2/iot-wifi-bluetooth-modules/raytac/); nicht das MDBT42Q-PAT (nRF52810, kein Espruino). Der Espruino-Shop hatte das nackte Modul im November 2026 nicht mehr, nur das Breakout, das nicht auf die Platine passt |
+| Raspberry Pi Pico (H) als SWD-Programmer, einmalig für alle Sensoren | 1 | ≈ 5–10 € | |
 | Leiterplatten, bestückt (JLCPCB fertigt mindestens 5) | 5 | ≈ 23 $ für alle fünf bestückt, mit Versand und Einfuhrabgaben nach Deutschland und Neukunden-Gutschein (November 2026) | JLCPCB |
 | ZH-1,5-Set: 2-polige Stecker mit Kabel und stehende Platinenbuchsen (Buchsen für J1–J3, ein Kabel für J3) | 1 Packung | ≈ 8 € | z. B. Amazon (Nachbau, Passung zu den Modulsteckern prüfen) |
 | ETFE-Solarmodul 0,8 W, 6 V, 70 × 70 × 2 mm, ZH-1,5-Stecker (1 × Messung, 1 × Versorgung) | 2 | 17–32 € | AliExpress |
@@ -280,7 +291,7 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 
 Wer mehrere Sensoren baut, braucht alles außer den Leiterplatten und dem ZH-Set entsprechend öfter. Pro weiterem Sensor kommen so rund 50 € dazu. Die Messmodule sollten dann aus derselben Charge stammen (siehe [Abgleich](#abgleich)).
 
-Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch, wetterfester Kleb- und Dichtstoff auf MS-Polymer-Basis für die Module. Optional eine Stiftleiste für J4.
+Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch, wetterfester Kleb- und Dichtstoff auf MS-Polymer-Basis für die Module. Eine 6-polige Stiftleiste für J4 (zum Aufspielen von Espruino) und ein paar Jumperkabel Buchse–Buchse.
 
 ## Aufbau und Montage
 
