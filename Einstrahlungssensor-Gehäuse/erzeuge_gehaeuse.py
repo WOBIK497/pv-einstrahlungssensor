@@ -25,15 +25,15 @@ from FreeCAD import Vector as V
 ORDNER = os.path.dirname(os.path.abspath(__file__))
 
 # --- Parameter -------------------------------------------------------------
-PANEL = 70.0            # Kantenlänge Solarmodul
+PANEL = 70.2            # Kantenlänge Solarmodul: 6 Stück gemessen 70,08–70,19 mm (14.11.2026)
 PANEL_SPIEL = 2.0       # Tasche größer als Modul: 1 mm Klebefuge rundum
 NOPPE_SPIEL = 0.1       # Luft zwischen Positionsnoppe und Modulkante
 SEITEN_NOPPE_B = 2.0    # Breite der Positionsnoppen an den Taschenwänden
 SEITEN_NOPPE_UNTER = 0.8   # so weit enden sie unter der Oberfläche – der Kleber deckt sie zu
 FENSTER_R = 0.0         # Eckradius der Fenster unter den Modulen
-PANEL_D = 2.0           # Moduldicke laut Händler – nach Lieferung nachmessen
+PANEL_D = 1.8           # Moduldicke, gemessen 14.11.2026 (Händler: 2,0)
 KLEBER_D = 1.0          # Klebefuge unter dem Modul, durch Noppen festgelegt; 1 mm, damit der
-                        # elastische Kleber die Wärmedehnung PETG/FR-4 aufnimmt
+                        # elastische Kleber die Wärmedehnung ASA/FR-4 aufnimmt
 TASCHE_TIEFE = PANEL_D + KLEBER_D   # Moduloberseite bündig mit der Deckeloberseite
 NOPPE_D = 3.0           # Abstandsnoppen auf dem Klebering, je Tasche vier
 AUFLAGE = 8.0           # Breite des Kleberings unter dem Modul
@@ -43,6 +43,9 @@ EINSATZ_WAND = 2.0      # Mindestwand zwischen Einsatzloch und Modultasche
 DECKEL_D = 7.2          # trägt die Gewindeeinsätze von unten (6,0 Loch + 1,2 darüber)
 DECKEL_RUNDUNG = 2.0    # Radius der oberen umlaufenden Außenkante
 WAND = 5.2             # Nut 2,8 mm + je 1,2 mm Material
+MATERIAL = "ASA"          # schwarz; braucht geschlossenen Bauraum (gedruckt auf Prusa CORE One+)
+MATERIAL_FESTIGKEIT = 40.0  # MPa, Zugfestigkeit gedruckt, vorsichtig angesetzt
+MATERIAL_DEHNUNG = 0.02     # zulässige Randdehnung kurzzeitig beim Einrasten, quer zu den Lagen
 BODEN = 2.4
 INNEN_H = 22.6          # Innenhöhe der Wanne; mit SCHRAUBE_L → 5 mm Gewindeeingriff
 R_ECKE = 5.0
@@ -74,29 +77,34 @@ ABSTAND_H = 5.0         # Höhe der Abstandshalter
 PLATINE_SCHRAUBE_L = 6.0   # Linsenkopfschraube M3 (ISO 7045), formt ihr Gewinde im 2,6-mm-Loch
 KOND_L, KOND_B = 36.0, 22.0   # Mulde für den 5,5-V-4-F-Kombikondensator
 KOND_X, KOND_Y = 48.0, -4.0
-# Kondensator selbst: Kombityp aus zwei Zellen nebeneinander im Schrumpfschlauch
-# (typisch 2 × Ø 10 × 26 mm, z. B. Viking SC5V5Z405MH, CDA CHP5R5L405R) – nachmessen
-KOND_ZELLE_D, KOND_ZELLE_L = 10.5, 26.5
+# Kondensator selbst: Kombityp aus zwei Zellen nebeneinander im Schrumpfschlauch.
+# Gemessen 14.11.2026 (3 Stück): Länge 22,55–22,80, Breite 25,60–25,64, Höhe 12,98–13,02 mm.
+# Zellendurchmesser = halbe größte Breite (die Klammern greifen seitlich), Länge = größte
+# Länge + 0,2 mm Luft zwischen den Stirnanschlägen
+KOND_ZELLE_D, KOND_ZELLE_L = 12.82, 23.0
 KOND_DRAHT_D, KOND_DRAHT_L = 0.6, 8.0
 # Schnappklammern: je zwei federnde Arme greifen mit einer runden Rastnase über
 # die Außenseiten der beiden Zellen; Kondensator wird von oben eingedrückt
 KLAMMER_LAGE = (0.25, 0.75)   # Lage entlang der Zellen (Anteil der Zellenlänge)
 KLAMMER_B = 6.0         # Breite in Zellenrichtung
-KLAMMER_T = 1.2         # Armdicke (3 Druckbahnen à 0,4 mm)
+KLAMMER_T = 1.0         # Armdicke (ASA ist spröder als PETG; 1,2 mm gaben 2,1 % Dehnung)
 KLAMMER_LUFT = 0.15     # Luft zwischen Arm und Zelle
-KLAMMER_WINKEL = 30.0   # Rastnase greift so viele Grad über dem Zellenäquator
+KLAMMER_WINKEL = 25.0   # Rastnase greift so viele Grad über dem Zellenäquator (vorher 30)
 KLAMMER_NASE_R = 1.0    # Radius der Rastnase
-KOND_ANSCHLAG_H = (3.0, 6.0)   # Stirnanschläge: Drahtseite (unter den Drähten), Gegenseite
-# Druckausgleichselement M12 × 1,5 (AGRO 2455.12: SW 17, Kopf 9 mm, Gewinde 10 mm),
+KOND_ANSCHLAG_H = (3.0, 6.0)   # Stirnanschläge: Drahtseite (unter den Drähten, gemessen höchstens 4), Gegenseite
+# Druckausgleichselement M12 × 1,5 (Amazon/PigJuan), gemessen 14.11.2026: gesamt 18,26, Kopf 8,20
+# (Sechskant SW 16,79 über die ganze Höhe), Gewinde 10,06; Belüftungsschlitz 1,1 mm hoch mittig im Kopf;
+# O-Ring liegt in einer Nut der Kopfauflage (trägt nicht auf, Taschentiefe unabhängig davon),
 # von außen in eine Tasche im Boden versenkt, innen mit Gegenmutter gekontert
 DAE_X, DAE_Y = -36.0, 0.0
-DAE_SW, DAE_KOPF_H, DAE_GEWINDE_L = 17.0, 9.0, 10.0
+DAE_SW, DAE_KOPF_H, DAE_GEWINDE_L = 16.8, 8.2, 10.0
+DAE_SCHLITZ_H = 1.1        # Belüftungsschlitz mittig im Kopf: muss außerhalb des Sechskantsitzes liegen
 DAE_LOCH = 12.4
 DAE_TASCHE_D = 21.0       # runder Teil der Tasche (Kappe)
-DAE_TASCHE_SW = 17.6      # Sechskant am Taschengrund: Kopf dreht beim Kontern nicht mit
-DAE_SECHSKANT_T = 4.0
-DAE_TASCHE_T = 9.3        # Kopf liegt 0,3 mm hinter der Bodenfläche
-MUTTER_SW, MUTTER_H = 17.0, 5.0   # Gegenmutter M12 × 1,5 (Kunststoff)
+DAE_TASCHE_SW = 17.2      # Sechskant am Taschengrund (0,4 Luft zum Kopf): Kopf dreht beim Kontern nicht mit
+DAE_SECHSKANT_T = 3.0     # endet 0,55 mm vor dem Belüftungsschlitz (3,55–4,65 über der Auflage)
+DAE_TASCHE_T = 8.5        # Kopf liegt 0,3 mm hinter der Bodenfläche
+MUTTER_SW, MUTTER_H = 15.9, 5.12  # Gegenmutter M12 × 1,5, gemessen 14.11.2026: SW 15,86, 5,12 hoch, Kragen Ø 16,83
 DAE_DOM_D = 26.0          # 2,5 mm Wand um die Tasche
 # Halter am langen Paneelrahmen (JA Solar JAM60D41, Datenblatt S. 2): Paneel quer,
 # Gehäuse an der oberen Langkante neben dem Rahmen (−y = zum Paneel), Deckel bündig
@@ -484,6 +492,11 @@ print(f"Senkung bis Außenhaut: {senk_wand:.2f} mm")
 nut_loch = DOM_D / 2 - NUT_AUSSEN - M3_DURCH / 2
 nut_einsatz = DOM_D / 2 - NUT_AUSSEN - M3_EINSATZ_D / 2
 print(f"Nut innen am Dom: {nut_loch:.1f} mm bis Schraubenloch, {nut_einsatz:.1f} mm bis Einsatzloch im Deckel")
+_schlitz_u = (DAE_KOPF_H - DAE_SCHLITZ_H) / 2   # Schlitzunterkante ab der Kopfauflage
+print(f"Druckausgleich: Belüftungsschlitz {_schlitz_u:.2f}–{_schlitz_u + DAE_SCHLITZ_H:.2f} mm über der Auflage, "
+      f"Sechskantsitz {DAE_SECHSKANT_T:.1f} mm tief, {_schlitz_u - DAE_SECHSKANT_T:.2f} mm Abstand")
+if DAE_SECHSKANT_T > _schlitz_u - 0.3:
+    print("WARNUNG: Sechskantsitz verdeckt den Belüftungsschlitz des Druckausgleichs")
 print(f"Druckausgleich: Dom {DAE_DOM_H:.1f} mm hoch, {DAE_DOM_H - DAE_TASCHE_T:.1f} mm Material über der "
       f"Tasche, Gewinde ragt {DAE_TASCHE_T + DAE_GEWINDE_L - DAE_DOM_H:.1f} mm für die Mutter ({MUTTER_H:.0f} mm) heraus")
 print(f"Nut {NUT_B:.2f} × {NUT_T:.2f} mm, Füllung {math.pi * ORING_D ** 2 / 4 / (NUT_B * NUT_T) * 100:.0f} %, "
@@ -507,8 +520,8 @@ k_weg = KOND_ZELLE_D - (k_nase_y - KLAMMER_NASE_R)
 k_arm = k_nase_z - BODEN
 k_dehnung = 1.5 * KLAMMER_T * k_weg / k_arm ** 2
 print(f"Schnappklammer: Arm {k_arm:.1f} mm lang, federt beim Einrasten {k_weg:.2f} mm aus, "
-      f"Dehnung {k_dehnung * 100:.1f} % (PETG verträgt dauerhaft etwa 3 %)")
-if k_dehnung > 0.03:
+      f"Dehnung {k_dehnung * 100:.1f} % ({MATERIAL} quer zu den Lagen: höchstens {MATERIAL_DEHNUNG * 100:.0f} %)")
+if k_dehnung > MATERIAL_DEHNUNG:
     print("WARNUNG: Klammerarm wird beim Einrasten überdehnt – dünner oder länger machen")
 # Halter: Schraubenlängen aus Klemmlänge, Abstand zu den Deckelschrauben und zum Druckausgleich
 NORM_L = (8, 10, 12, 16, 20, 25, 30, 35, 40)
@@ -530,13 +543,13 @@ if HALTER_ART == "getrennt":
         print("WARNUNG: Halter verdeckt Deckelschrauben")
 else:
     _lb = lasche.BoundBox
-    # Biegung an der Wand: Kraft senkrecht zum Paneel am Schraubenloch, PETG ~ 50 MPa
+    # Biegung an der Wand: Kraft senkrecht zum Paneel am Schraubenloch
     _w = _lb.XLength * Z_RAHMEN ** 2 / 6
-    _f = 50.0 * _w / (-H / 2 - Y_LOCH)
+    _f = MATERIAL_FESTIGKEIT * _w / (-H / 2 - Y_LOCH)
     print(f"Lasche (angedruckt): {_lage}, {_lb.XLength:.0f} × {-H / 2 - Y_FLANSCH:.0f} × {Z_RAHMEN:.1f} mm"
           + (f", Boden {BODEN_ZUSATZ:.1f} mm dicker" if BODEN_ZUSATZ > 0 else ""))
     print(f"Lasche: M6 × {M6_L} (Klemmlänge {_m6_klemm:.1f} mm bei {RAHMEN_FLANSCH_D:.1f} mm Flansch), "
-          f"bricht an der Wand bei etwa {_f:.0f} N senkrecht zum Paneel (PETG 50 MPa)")
+          f"bricht an der Wand bei etwa {_f:.0f} N senkrecht zum Paneel ({MATERIAL} {MATERIAL_FESTIGKEIT:.0f} MPa)")
 if Z_RAHMEN < 0:
     print("WARNUNG: Gehäuse niedriger als der Rahmen – Arm liegt tiefer als die Platte")
 

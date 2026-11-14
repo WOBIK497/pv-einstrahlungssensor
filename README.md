@@ -9,7 +9,7 @@ Ein kabelloser Sensor, der die Sonneneinstrahlung **in der Ebene einer PV-Fläch
 
 > **Stand: Entwurf (November 2026).** Platine, Gehäuse und Programm sind fertig konstruiert und rechnerisch geprüft, aber **noch nicht gebaut**. Was am ersten Exemplar zu prüfen ist, steht unter [Offene Punkte](#offene-punkte). Nachbau auf eigenes Risiko.
 
-**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric FreeCAD enclosure (PETG, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. A section compares other radio links (Wi-Fi, Zigbee, 868 MHz GFSK and LoRa) for larger rooftop arrays without a Bluetooth receiver nearby. Documentation is in German.
+**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric FreeCAD enclosure (black ASA, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. A section compares other radio links (Wi-Fi, Zigbee, 868 MHz GFSK and LoRa) for larger rooftop arrays without a Bluetooth receiver nearby. Documentation is in German.
 
 ---
 
@@ -73,7 +73,7 @@ Ein zweites, baugleiches Modul lädt einen Superkondensator, aus dem das Funkmod
 | Verbrauch | ≈ 40 µA im Mittel, Kondensator überbrückt ≈ 2 Tage Dunkelheit |
 | Kaltstart | ≈ 6 min bei bedecktem Himmel (200 W/m²) |
 | Platine | 38 × 46 mm, 2 Lagen, SMD-Bestückung durch JLCPCB |
-| Gehäuse | 3D-Druck (PETG), 160 × 90 × 32,2 mm, O-Ring-gedichtet, Druckausgleichselement, angedruckte Lasche für den Paneelrahmen |
+| Gehäuse | 3D-Druck (ASA, schwarz), 160 × 90 × 32,2 mm, O-Ring-gedichtet, Druckausgleichselement, angedruckte Lasche für den Paneelrahmen |
 | Kosten | rund 90 € für einen Sensor, jeder weitere rund 50 € |
 
 ## Elektronik
@@ -172,16 +172,16 @@ Ohne Lötkolben geht es auch mit einer **Heizplatte** und Niedertemperatur-Lötp
 |---|---|
 | ![Unterteil mit Platine und Kondensator](Einstrahlungssensor-Gehäuse/Bilder/unterteil.jpg) | ![Boden mit Druckausgleichselement, acht Senkschrauben und der Lasche mit M6-Langloch](Einstrahlungssensor-Gehäuse/Bilder/boden.jpg) |
 
-Zwei Druckteile, beide passen auf ein 180-mm-Druckbett (Prusa mini):
+Zwei Druckteile, beide passen auf ein 180-mm-Druckbett. Für ASA braucht der Drucker einen geschlossenen Bauraum (z. B. Prusa Core One):
 
 - **Außenmaß** 160 × 90 × 32,2 mm (Unterteil 25,0 mm, Deckel 7,2 mm), mit Lasche 160 × 118 mm. Innenraum 149,6 × 79,6 × 22,6 mm.
-- **Deckel:** eine gemeinsame Tasche (143 × 72 × 3,0 mm) für beide Module. Die Module liegen auf einer 1 mm dicken Klebefuge und schließen **bündig** mit der Deckeloberseite ab. Abstandsnoppen auf dem Klebering (vier je Modul) legen die Fugendicke fest, Positionsnoppen an den Taschenwänden die Lage, zwei Distanznoppen halten 1 mm Abstand zwischen den Modulen. Unter jedem Modul ein Fenster für Kabel und Anschlussdose. Obere Außenkante mit R 2 abgerundet, außer zur Rahmenseite.
+- **Deckel:** eine gemeinsame Tasche (143,4 × 72,2 × 2,8 mm) für beide Module. Die Module liegen auf einer 1 mm dicken Klebefuge und schließen **bündig** mit der Deckeloberseite ab. Abstandsnoppen auf dem Klebering (vier je Modul) legen die Fugendicke fest, Positionsnoppen an den Taschenwänden die Lage, zwei Distanznoppen halten 1 mm Abstand zwischen den Modulen. Unter jedem Modul ein Fenster für Kabel und Anschlussdose. Obere Außenkante mit R 2 abgerundet, außer zur Rahmenseite.
 - **Dichtung:** geschlossener **O-Ring 148 × 2 mm, EPDM 70** (wetter-, UV- und ozonfest) als Axialdichtung in einer Nut von 2,8 × 1,5 mm (≈ 25 % Verpressung, 75 % Nutfüllung, 1,9 % Dehnung). Passend sind O-Ringe mit 146–150 mm Innendurchmesser.
 - **Verschraubung:** acht Senkschrauben **M3 × 30** von unten durch Dome im Unterteil in Gewindeeinsätze M3 × 5,7 im Deckel (5 mm Gewindeeingriff). Die Nut läuft innen um die Dome herum, die Schraubenlöcher liegen also außerhalb der Dichtung.
 - **Druckausgleich:** ein Membranelement **M12 × 1,5** sitzt versenkt in einer Tasche im Boden (Sechskant gegen Mitdrehen), innen mit einer Gegenmutter gekontert. Es lässt Luft durch, aber kein Wasser, und verhindert, dass das Gehäuse bei Temperaturwechseln Feuchtigkeit ansaugt.
 - **Platine:** Die Antennenkante steckt in zwei Haltern mit Schlitz, die Unterkante liegt auf zwei Abstandshaltern (5 mm) und wird mit zwei Linsenkopfschrauben M3 × 6 (ISO 7045) befestigt, die sich ihr Gewinde im 2,6-mm-Loch selbst formen.
-- **Superkondensator:** liegt zwischen zwei Stirnanschlägen (an der Drahtseite niedrig, die Drähte laufen darüber) und wird in zwei Schnappklammern gedrückt (federnde Arme mit Rastnase, 2,1 % Dehnung, für PETG unkritisch).
-- **Befestigung:** Die Halterung ist für **quer oder hochkant verbaute Paneele** gedacht. Bei quer verbauten (lange Seite waagerecht) liegen die Montagelöcher in den Rahmenseiten oben und unten, der beste Platz für den Sensor ist **oben**: Dort sieht er denselben Himmel wie das Paneel, wird nicht von Brüstung, Geländer oder einer unteren Paneelreihe verschattet, und Regenwasser, Schnee und Schmutz laufen vom Paneel nach unten ab statt über den Sensor. Bei hochkant verbauten sitzt der Sensor seitlich an einer Langkante, am besten am oberen Montageloch. Das Gehäuse sitzt neben der oberen Langkante des Paneels und liegt mit der Wand direkt am Rahmen an. Eine Lasche (160 × 28 × 2,2 mm), in einem Stück mit dem Unterteil gedruckt, greift hinten unter den Fußflansch des Rahmens und wird mit **einer M6-Schraube durch ein Montageloch im Rahmenflansch** gehalten (Langloch ±2 mm). Gemeint sind die Montagelöcher, die gerahmte PV-Paneele ab Werk im Fußflansch der langen Rahmenseiten haben und die im Datenblatt des Paneels eingezeichnet sind. Gebohrt wird nichts. So liegt der Deckel **bündig mit der Rahmenvorderkante**: Das Gehäuse verschattet das Paneel nicht und der Rahmen nicht die Module. Die Wand am Rahmen verhindert das Verdrehen und trägt das Gewicht. Zur Rahmenseite haben Unterteil und Deckel keine Eckradien, damit sich kein Schmutz in Zwickeln sammelt. Die Lasche ist nur 2,2 mm dick, weil sie genau den Höhenunterschied zwischen Gehäuse (32,2 mm) und Rahmen (30 mm) ausfüllt. Sie hält trotzdem rund 340 N senkrecht zum Paneel, eine Sturmböe drückt mit 15–20 N. Rahmenmaße nach dem Datenblatt JA Solar JAM60D41 (langer Rahmen 30 mm hoch, Fußflansch 28 mm, Lochmitte 19 mm von der Außenfläche): Bei anderen Paneelen die Parameter `RAHMEN_*` und `MONTAGELOCH_ABSTAND` im Skript anpassen.
+- **Superkondensator:** liegt zwischen zwei Stirnanschlägen (an der Drahtseite niedrig, die Drähte laufen darüber) und wird in zwei Schnappklammern gedrückt (federnde Arme 1,0 mm dick, Rastnase 25° über dem Zellenäquator, 1,1 % Dehnung beim Einrasten – ASA ist spröder als PETG und quer zu den Lagen schwächer, darum unter 2 %).
+- **Befestigung:** Die Halterung ist für **quer oder hochkant verbaute Paneele** gedacht. Bei quer verbauten (lange Seite waagerecht) liegen die Montagelöcher in den Rahmenseiten oben und unten, der beste Platz für den Sensor ist **oben**: Dort sieht er denselben Himmel wie das Paneel, wird nicht von Brüstung, Geländer oder einer unteren Paneelreihe verschattet, und Regenwasser, Schnee und Schmutz laufen vom Paneel nach unten ab statt über den Sensor. Bei hochkant verbauten sitzt der Sensor seitlich an einer Langkante, am besten am oberen Montageloch. Das Gehäuse sitzt neben der oberen Langkante des Paneels und liegt mit der Wand direkt am Rahmen an. Eine Lasche (160 × 28 × 2,2 mm), in einem Stück mit dem Unterteil gedruckt, greift hinten unter den Fußflansch des Rahmens und wird mit **einer M6-Schraube durch ein Montageloch im Rahmenflansch** gehalten (Langloch ±2 mm). Gemeint sind die Montagelöcher, die gerahmte PV-Paneele ab Werk im Fußflansch der langen Rahmenseiten haben und die im Datenblatt des Paneels eingezeichnet sind. Gebohrt wird nichts. So liegt der Deckel **bündig mit der Rahmenvorderkante**: Das Gehäuse verschattet das Paneel nicht und der Rahmen nicht die Module. Die Wand am Rahmen verhindert das Verdrehen und trägt das Gewicht. Zur Rahmenseite haben Unterteil und Deckel keine Eckradien, damit sich kein Schmutz in Zwickeln sammelt. Die Lasche ist nur 2,2 mm dick, weil sie genau den Höhenunterschied zwischen Gehäuse (32,2 mm) und Rahmen (30 mm) ausfüllt. Sie hält trotzdem rund 270 N senkrecht zum Paneel (ASA, vorsichtig mit 40 MPa gerechnet), eine Sturmböe drückt mit 15–20 N. Rahmenmaße nach dem Datenblatt JA Solar JAM60D41 (langer Rahmen 30 mm hoch, Fußflansch 28 mm, Lochmitte 19 mm von der Außenfläche): Bei anderen Paneelen die Parameter `RAHMEN_*` und `MONTAGELOCH_ABSTAND` im Skript anpassen.
 
 | Montiert, von vorn | Montiert, von hinten |
 |---|---|
@@ -204,8 +204,9 @@ Zum Anschauen gibt es die Baugruppe als FreeCAD-Datei: `Gehäuse mit Einbauteile
 
 ### Drucken
 
-- **Material: PETG** in heller Farbe. Kein PLA, es wird ab etwa 55 °C weich: Die beiden schwarzen Solarzellen im eigenen Deckel heizen sich in der Sommersonne auf 60 °C und mehr auf, und das Gehäuse liegt zusätzlich direkt am Rahmen des PV-Paneels, der ebenso heiß wird. ASA wäre UV-fester, verzieht sich auf einem offenen Drucker bei 16 cm Länge aber leicht.
-- **Lage:** Unterteil mit dem Boden aufs Bett, die Lasche liegt mit auf. Deckel mit der Tasche nach oben. Kein Stützmaterial.
+- **Material: ASA, schwarz.** Die beiden schwarzen Solarzellen im Deckel heizen sich in der Sommersonne auf 65–70 °C auf, und das Gehäuse liegt direkt am Rahmen des PV-Paneels, der ebenso heiß wird. PETG wird ab etwa 70 °C weich und gäbe unter der Dauerlast (O-Ring-Pressung durch acht Schrauben, gespannte Lasche) über die Jahre nach; ASA hält bis etwa 95 °C und ist dazu UV-beständig. Schwarz, weil Ruß als Pigment am wenigsten ausbleicht und zusätzlich UV abfängt; ein heller Kunststoff kühlt kaum, denn die Wärme kommt vor allem von den Modulen im Deckel. Kein PLA (weich ab etwa 55 °C). PETG geht auf einem offenen Drucker zur Not auch, hält aber weniger lange.
+- **Drucker:** ASA nur mit geschlossenem Bauraum, auf einem offenen Drucker verzieht sich das 16 cm lange Unterteil. Brim am Unterteil, Bauraum vorheizen, Raum lüften (Styrol).
+- **Lage:** Unterteil mit dem Boden aufs Bett, die Lasche liegt mit auf. Deckel mit der Tasche nach oben. Kein Stützmaterial. Die Klammerarme stehen senkrecht, ihre Biegung geht quer zu den Lagen – nicht anders drucken, aber auch nicht beim Einsetzen des Kondensators hebeln.
 - **Einstellungen:** 0,2 mm Schichthöhe, 4 Perimeter, 5 obere und untere Schichten, 25 % Gyroid. Die vielen Perimeter machen die Wände dicht.
 - **Gewindeeinsätze:** Löcher 4,0 mm für M3 × 5,7 im Deckel, passend etwa zu Ruthex. Andere Einsätze → Maße im Skript anpassen.
 
@@ -287,7 +288,7 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 | Senkschrauben M3 × 30 (ISO 10642), Edelstahl | 8 | | |
 | Linsenkopfschrauben M3 × 6 (ISO 7045), Edelstahl, für die Platine | 2 | | |
 | Mutter M12 × 1,5 (Kunststoff), falls beim Druckausgleich keine dabei ist | 1 | | |
-| PETG | ≈ 120 g | | |
+| ASA, schwarz | ≈ 100 g | | |
 
 Wer mehrere Sensoren baut, braucht alles außer den Leiterplatten und dem ZH-Set entsprechend öfter. Pro weiterem Sensor kommen so rund 50 € dazu. Die Messmodule sollten dann aus derselben Charge stammen (siehe [Abgleich](#abgleich)).
 
@@ -304,7 +305,7 @@ Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch,
 7. Messmodul in J2, Versorgungsmodul in J1. Ein ZH-Kabel an den Superkondensator löten (Rot an Plus, Schrumpfschlauch) und in J3 stecken. Alternativ den Kondensator direkt auf die Platine löten: J3 dann nicht bestücken und die Kondensatordrähte, falls nötig mit zwei Litzen verlängert, in die Lötaugen von J3 löten, Plus ans eckige Pad. Der Kondensator lässt sich dann allerdings nicht mehr abziehen.
 8. Platine mit der Antennenkante schräg in die Schlitze schieben, ablegen, unten mit zwei M3 × 6 festschrauben. Kondensator in die Klammern drücken.
 9. O-Ring in die Nut legen, Deckel aufsetzen und mit acht M3 × 30 von unten gleichmäßig anziehen, bis er rundum aufliegt.
-10. Den Sensor an die obere Langkante des quer verbauten Paneels setzen (bei hochkant verbauten seitlich ans obere Montageloch): Wand am Rahmen, Lasche hinten am Fußflansch, Langloch über dem Montageloch im Rahmenflansch. Die M6 × 16 von innen durch den Flansch stecken (Kopf zwischen Flansch und Paneel), hinten Karosseriescheibe und Sicherungsmutter, nur mäßig anziehen – PETG gibt unter zu viel Druck auf Dauer nach. Nicht in den Rahmen bohren.
+10. Den Sensor an die obere Langkante des quer verbauten Paneels setzen (bei hochkant verbauten seitlich ans obere Montageloch): Wand am Rahmen, Lasche hinten am Fußflansch, Langloch über dem Montageloch im Rahmenflansch. Die M6 × 16 von innen durch den Flansch stecken (Kopf zwischen Flansch und Paneel), hinten Karosseriescheibe und Sicherungsmutter, nur mäßig anziehen – auch ASA gibt unter zu viel Druck auf Dauer nach. Nicht in den Rahmen bohren.
 
 ## Offene Punkte
 
@@ -312,7 +313,7 @@ Folgendes ist bisher nur aus Datenblättern und Quelltext abgeleitet. Deshalb zu
 
 - **Bestückung:** Sitzen D1 und D2 richtig herum? Höchstens 4,9 V am Kondensator, 3,3 V an J4?
 - **Stecker:** Passen die Modulstecker in die ZH-Buchsen, und auf welcher Seite liegt Rot?
-- **Gehäuse:** Moduldicke, Kondensatormaße und Druckausgleichselement nachmessen. Die Tasche ist für ein Element mit 10 mm Gewinde und 9 mm Kopf ausgelegt, das JDAE12 hat laut Datenblatt vermutlich nur 6 mm Gewinde. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht?
+- **Gehäuse:** Module (70,2 × 70,2 × 1,8 mm) und Kondensator (22,8 × 25,6 × 13,0 mm) sind nachgemessen und eingetragen, ebenso das Druckausgleichselement (Sechskantkopf SW 16,8 × 8,2 mm, Gewinde 10 mm, Belüftungsschlitze in der Kopfmitte frei vom 3 mm tiefen Sechskantsitz). Gegenmutter gemessen (5,1 mm hoch), der O-Ring des Elements liegt in einer Nut im Kopf. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht?
 - **Befestigung:** Passt das Paneel zum Datenblatt JAM60D41 (Rahmen 30 mm hoch, Flansch 28 mm), trifft das Langloch das Montageloch, liegt der Deckel bündig? Die Flanschdicke ist aus der maßstabsgetreuen Profilzeichnung im Datenblatt ausgemessen (≈ 1,7 mm), M6 × 16 reicht bis etwa 4 mm.
 - **Empfang:** Hört ein Bluetooth-Proxy den Sensor am Montageort zuverlässig?
 - **Nacht:** Wie weit sinkt die Kondensatorspannung bis zum Morgen (Leckstrom)?
@@ -362,7 +363,7 @@ Beide nutzen das europäische Band für Kurzstreckenfunk (863–870 MHz). Das du
 
 - **Hardware:** ein Funkmodul mit SX1262 (z. B. Ebyte E22-900M22S, 14 × 20 mm) an SPI neben dem MDBT42Q. Bluetooth bleibt dann zum Programmieren erhalten. Einen fertigen Espruino-Treiber gibt es meines Wissens nur für den älteren SX127x (z. B. RFM95), für den SX1262 müsste man ihn selbst schreiben. Die Platine wird größer.
 - **Strom:** ≈ 45 mA beim Senden mit +14 dBm, im Schlaf unter 1 µA. Die Spitzen liefert der Superkondensator, der XC6206 schafft sie.
-- **Antenne:** Eine λ/4-Antenne ist etwa 8,6 cm lang. Eine Wendelantenne passt ins Gehäuse, PETG lässt die Funkwellen durch. Der Alurahmen direkt daneben verstimmt sie, das ist am Montageort zu prüfen. Eine Antenne außen wäre ein weiterer Durchbruch durch die Dichtung.
+- **Antenne:** Eine λ/4-Antenne ist etwa 8,6 cm lang. Eine Wendelantenne passt ins Gehäuse, ASA lässt die Funkwellen durch. Der Alurahmen direkt daneben verstimmt sie, das ist am Montageort zu prüfen. Eine Antenne außen wäre ein weiterer Durchbruch durch die Dichtung.
 - **Empfänger:** ein eigenes Gerät, z. B. ein ESP32-Board mit SX1262 (rund 20 €) mit ESPHome, das die Pakete auswertet und an Home Assistant weitergibt. Die automatische Erkennung wie bei BTHome entfällt.
 - **Funkregeln** (ETSI EN 300 220): Im Bereich 868,0–868,6 MHz darf ein Gerät höchstens 1 % der Zeit senden, im Bereich 869,40–869,65 MHz höchstens 10 %.
 
