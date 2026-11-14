@@ -16,3 +16,8 @@ Einstrahlungssensor-Gehäuse/pruefung-inhalt.stl
 
 # Lokaler Bauzettel mit Einkaufslinks und Pfaden
 einstrahlungssensor.html
+
+# Lokale Arbeitsdateien: Teileliste (mit privaten Angaben), Messtabelle, alte BOM/CPL-Kopien
+Teileliste.html
+PV Bauteil Maße.xlsx
+Einstrahlungssensor-Platine/* Kopie.csv
