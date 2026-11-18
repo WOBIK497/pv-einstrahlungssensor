@@ -9,7 +9,7 @@ Ein kabelloser Sensor, der die Sonneneinstrahlung **in der Ebene einer PV-Fläch
 
 > **Stand: Entwurf (November 2026).** Platine, Gehäuse und Programm sind fertig konstruiert und rechnerisch geprüft, aber **noch nicht gebaut**. Was am ersten Exemplar zu prüfen ist, steht unter [Offene Punkte](#offene-punkte). Nachbau auf eigenes Risiko.
 
-**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric FreeCAD enclosure (black ASA, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. A section compares other radio links (Wi-Fi, Zigbee, 868 MHz GFSK and LoRa) for larger rooftop arrays without a Bluetooth receiver nearby. Documentation is in German.
+**English summary:** A wireless, battery-free irradiance sensor for balcony/rooftop PV. A 70 mm ETFE solar cell operated near short circuit across a 10 Ω shunt measures plane-of-array irradiance; a second cell charges a 4 F supercapacitor. An Espruino-powered Raytac MDBT42Q (nRF52832) broadcasts the readings as BTHome v2, received by Home Assistant via Shelly Bluetooth proxies. Includes a scripted KiCad 9 PCB (38 × 46 mm, JLCPCB-ready), a parametric enclosure designed in SolidCraft (STEP/STL included, the older FreeCAD script is kept; black ASA, O-ring sealed, membrane vent, printed tab that bolts to the panel frame flush with its front edge) and the Espruino program. A section compares other radio links (Wi-Fi, Zigbee, 868 MHz GFSK and LoRa) for larger rooftop arrays without a Bluetooth receiver nearby. Documentation is in German.
 
 ---
 
@@ -177,9 +177,9 @@ Zwei Druckteile, beide passen auf ein 180-mm-Druckbett. Für ASA braucht der Dru
 - **Außenmaß** 160 × 90 × 32,2 mm (Unterteil 25,0 mm, Deckel 7,2 mm), mit Lasche 160 × 118 mm. Innenraum 149,6 × 79,6 × 22,6 mm.
 - **Deckel:** eine gemeinsame Tasche (143,4 × 72,2 × 2,8 mm) für beide Module. Die Module liegen auf einer 1 mm dicken Klebefuge und schließen **bündig** mit der Deckeloberseite ab. Abstandsnoppen auf dem Klebering (vier je Modul) legen die Fugendicke fest, Positionsnoppen an den Taschenwänden die Lage, zwei Distanznoppen halten 1 mm Abstand zwischen den Modulen. Unter jedem Modul ein Fenster für Kabel und Anschlussdose. Obere Außenkante mit R 2 abgerundet, außer zur Rahmenseite.
 - **Dichtung:** geschlossener **O-Ring 148 × 2 mm, EPDM 70** (wetter-, UV- und ozonfest) als Axialdichtung in einer Nut von 2,8 × 1,5 mm (≈ 25 % Verpressung, 75 % Nutfüllung, 1,9 % Dehnung). Passend sind O-Ringe mit 146–150 mm Innendurchmesser.
-- **Verschraubung:** acht Senkschrauben **M3 × 30** von unten durch Dome im Unterteil in Gewindeeinsätze M3 × 5,7 im Deckel (5 mm Gewindeeingriff). Die Nut läuft innen um die Dome herum, die Schraubenlöcher liegen also außerhalb der Dichtung.
+- **Verschraubung:** acht Senkschrauben **M3 × 30** von unten durch Dome im Unterteil in Gewindeeinsätze **ruthex RX-M3x4.0 SHORT** im Deckel. Sie greifen über die ganze Länge des Einsatzes (4 mm), die Spitze hat im 6 mm tiefen Loch noch 1 mm Platz. Die Nut läuft innen um die Dome herum, die Schraubenlöcher liegen also außerhalb der Dichtung.
 - **Druckausgleich:** ein Membranelement **M12 × 1,5** sitzt versenkt in einer Tasche im Boden (Sechskant gegen Mitdrehen), innen mit einer Gegenmutter gekontert. Es lässt Luft durch, aber kein Wasser, und verhindert, dass das Gehäuse bei Temperaturwechseln Feuchtigkeit ansaugt.
-- **Platine:** Die Antennenkante steckt in zwei Haltern mit Schlitz, die Unterkante liegt auf zwei Abstandshaltern (5 mm) und wird mit zwei Linsenkopfschrauben M3 × 6 (ISO 7045) befestigt, die sich ihr Gewinde im 2,6-mm-Loch selbst formen.
+- **Platine:** Die Antennenkante steckt in zwei Haltern mit Schlitz, die Unterkante liegt auf zwei Haltern (Ø 8 × 5 mm) mit eingeschmolzenen Gewindeeinsätzen ruthex RX-M3x4.0 SHORT und wird mit zwei Linsenkopfschrauben M3 × 6 (ISO 7045) befestigt. Nicht länger: Die Spitze endet 0,5 mm über dem Grund der Bohrung.
 - **Superkondensator:** liegt zwischen zwei Stirnanschlägen (an der Drahtseite niedrig, die Drähte laufen darüber) und wird in zwei Schnappklammern gedrückt (federnde Arme 1,0 mm dick, Rastnase 25° über dem Zellenäquator, 1,1 % Dehnung beim Einrasten – ASA ist spröder als PETG und quer zu den Lagen schwächer, darum unter 2 %).
 - **Befestigung:** Die Halterung ist für **quer oder hochkant verbaute Paneele** gedacht. Bei quer verbauten (lange Seite waagerecht) liegen die Montagelöcher in den Rahmenseiten oben und unten, der beste Platz für den Sensor ist **oben**: Dort sieht er denselben Himmel wie das Paneel, wird nicht von Brüstung, Geländer oder einer unteren Paneelreihe verschattet, und Regenwasser, Schnee und Schmutz laufen vom Paneel nach unten ab statt über den Sensor. Bei hochkant verbauten sitzt der Sensor seitlich an einer Langkante, am besten am oberen Montageloch. Das Gehäuse sitzt neben der oberen Langkante des Paneels und liegt mit der Wand direkt am Rahmen an. Eine Lasche (160 × 28 × 2,2 mm), in einem Stück mit dem Unterteil gedruckt, greift hinten unter den Fußflansch des Rahmens und wird mit **einer M6-Schraube durch ein Montageloch im Rahmenflansch** gehalten (Langloch ±2 mm). Gemeint sind die Montagelöcher, die gerahmte PV-Paneele ab Werk im Fußflansch der langen Rahmenseiten haben und die im Datenblatt des Paneels eingezeichnet sind. Gebohrt wird nichts. So liegt der Deckel **bündig mit der Rahmenvorderkante**: Das Gehäuse verschattet das Paneel nicht und der Rahmen nicht die Module. Die Wand am Rahmen verhindert das Verdrehen und trägt das Gewicht. Zur Rahmenseite haben Unterteil und Deckel keine Eckradien, damit sich kein Schmutz in Zwickeln sammelt. Die Lasche ist nur 2,2 mm dick, weil sie genau den Höhenunterschied zwischen Gehäuse (32,2 mm) und Rahmen (30 mm) ausfüllt. Sie hält trotzdem rund 270 N senkrecht zum Paneel (ASA, vorsichtig mit 40 MPa gerechnet), eine Sturmböe drückt mit 15–20 N. Rahmenmaße nach dem Datenblatt JA Solar JAM60D41 (langer Rahmen 30 mm hoch, Fußflansch 28 mm, Lochmitte 19 mm von der Außenfläche): Bei anderen Paneelen die Parameter `RAHMEN_*` und `MONTAGELOCH_ABSTAND` im Skript anpassen.
 
@@ -187,7 +187,9 @@ Zwei Druckteile, beide passen auf ein 180-mm-Druckbett. Für ASA braucht der Dru
 |---|---|
 | ![Sensor neben der oberen Langkante des Paneels, Deckel bündig mit der Rahmenvorderkante](Einstrahlungssensor-Gehäuse/Bilder/montage.jpg) | ![Rückseite: Lasche unter dem Rahmenflansch, Pfeil auf die M6-Schraube im Montageloch](Einstrahlungssensor-Gehäuse/Bilder/montage-hinten-beschriftet.jpg) |
 
-Alle Maße stehen als Parameter oben in `erzeuge_gehaeuse.py`. Neu erzeugen (FreeCAD 1.x, headless):
+Konstruiert ist das Gehäuse seit November 2026 in **SolidCraft**: Unterteil und Deckel parametrisch mit gemeinsamen Maßen, dazu eine Baugruppe mit allen Einbauteilen (Platine, Module mit Kabeln, Superkondensator, Gewindeeinsätze, Schrauben, O-Ring, Druckausgleich, M6-Befestigung), deren Kollisionsprüfung keine Überschneidungen findet. Im Repository liegen Unterteil und Deckel als STEP zum Ändern und als STL für den Slicer (`gehaeuse-unterteil.*`, `gehaeuse-deckel.*`). Die SolidCraft-Dateien selbst sind nicht dabei, die Baugruppe enthält Herstellermodelle, die nicht weitergegeben werden dürfen.
+
+Das FreeCAD-Skript `erzeuge_gehaeuse.py` ist der **ältere Stand** und erzeugt nicht mehr genau diese Teile. Es weicht in drei Punkten ab: Gewindeeinsätze M3 × 5,7 statt RX-M3x4.0 SHORT, Platinenhalter ohne Einsätze (selbstformende Schrauben im 2,6-mm-Loch) und der Druckausgleich bei x = −36 statt −47 mm (dort blieben vor J2 nur 4 mm bis zur Platinenkante). Die Bilder oben und die FreeCAD-Baugruppen zeigen ebenfalls noch diesen Stand. Neu erzeugen (FreeCAD 1.x, headless):
 
 ```bash
 cd Einstrahlungssensor-Gehäuse
@@ -196,7 +198,7 @@ freecad.cmd pruefe_gehaeuse.py      # Passungsprüfung: Platine, Stecker, Konden
 python3 vorschau.py                 # Vorschaubilder in Bilder/ (nur Pillow nötig)
 ```
 
-Das Skript gibt beim Bauen die wichtigsten Kontrollmaße aus: Gewindeeingriff, Wandstärken an Einsätzen und Senkungen, Nutfüllung, O-Ring-Dehnung, Federweg der Schnappklammern. `pruefe_gehaeuse.py` meldet für den aktuellen Stand **0 Überschneidungen**.
+Das Skript gibt beim Bauen die wichtigsten Kontrollmaße aus: Gewindeeingriff, Wandstärken an Einsätzen und Senkungen, Nutfüllung, O-Ring-Dehnung, Federweg der Schnappklammern. `pruefe_gehaeuse.py` meldet für den FreeCAD-Stand **0 Überschneidungen**.
 
 `live_ansicht.py`, `live_uebernehmen.sh` und `live_befehl.sh` sind ein Hilfsmittel zum gemeinsamen Konstruieren: Das Makro läuft in der FreeCAD-Oberfläche, baut das Modell neu, sobald sich das Skript ändert, und zeigt Platine, Kabel, Schrauben und Module mit. Die Texturen dafür liegen im Ordner `Live-Ansicht/`, der nicht im Repository ist. Die Moduloberfläche erzeugt `erzeuge_modultextur.py`, die Platinenbilder kommen von `platine_ansicht_daten.py`. Für den Nachbau braucht man das alles nicht.
 
@@ -208,7 +210,7 @@ Zum Anschauen gibt es die Baugruppe als FreeCAD-Datei: `Gehäuse mit Einbauteile
 - **Drucker:** ASA nur mit geschlossenem Bauraum, auf einem offenen Drucker verzieht sich das 16 cm lange Unterteil. Brim am Unterteil, Bauraum vorheizen, Raum lüften (Styrol).
 - **Lage:** Unterteil mit dem Boden aufs Bett, die Lasche liegt mit auf. Deckel mit der Tasche nach oben. Kein Stützmaterial. Die Klammerarme stehen senkrecht, ihre Biegung geht quer zu den Lagen – nicht anders drucken, aber auch nicht beim Einsetzen des Kondensators hebeln.
 - **Einstellungen:** 0,2 mm Schichthöhe, 4 Perimeter, 5 obere und untere Schichten, 25 % Gyroid. Die vielen Perimeter machen die Wände dicht.
-- **Gewindeeinsätze:** Löcher 4,0 mm für M3 × 5,7 im Deckel, passend etwa zu Ruthex. Andere Einsätze → Maße im Skript anpassen.
+- **Gewindeeinsätze:** ruthex RX-M3x4.0 SHORT, Löcher 4,0 mm: im Deckel 6 mm tief, in den Platinenhaltern bis zum Boden. Andere Einsätze brauchen andere Löcher, dafür das STEP anpassen.
 
 ## Programm (Espruino)
 
@@ -281,13 +283,12 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 | ZH-1,5-Set: 2-polige Stecker mit Kabel und stehende Platinenbuchsen (Buchsen für J1–J3, ein Kabel für J3) | 1 Packung | ≈ 8 € | z. B. Amazon (Nachbau, Passung zu den Modulsteckern prüfen) |
 | ETFE-Solarmodul 0,8 W, 6 V, 70 × 70 × 2 mm, ZH-1,5-Stecker (1 × Messung, 1 × Versorgung) | 2 | 17–32 € | AliExpress |
 | Superkondensator 5,5 V / 4 F (Kombityp, zwei Zellen) | 1 | 3,50 € | AliExpress |
-| Druckausgleichselement M12 × 1,5, PA, PTFE-Membran, IP68 (z. B. Jacob JDAE12) | 1 | 3,25 € | Fachhandel |
+| Druckausgleichselement M12 × 1,5 mit Gegenmutter, PA, IP68 (Marke PigJuan) | 1 | | Amazon. Die Bodentasche ist auf dieses Teil ausgelegt (gemessen: Sechskantkopf SW 16,8 × 8,2 mm, Gewinde 10 mm, Gegenmutter SW 15,9 × 5,1 mm). Andere Elemente erst nachmessen |
 | O-Ring 148 × 2 mm, EPDM 70 | 1 | 4 € | Fachhandel |
-| Gewindeeinsätze M3 × 5,7 | 8 | | z. B. Ruthex |
+| Gewindeeinsätze ruthex RX-M3x4.0 SHORT (8 für den Deckel, 2 für die Platine) | 10 | | ruthex |
 | Befestigung: Sechskantschraube M6 × 16 (ISO 4017), Karosseriescheibe 6,4 × 18, Sicherungsmutter M6 (DIN 985), Edelstahl | je 1 | | |
 | Senkschrauben M3 × 30 (ISO 10642), Edelstahl | 8 | | |
 | Linsenkopfschrauben M3 × 6 (ISO 7045), Edelstahl, für die Platine | 2 | | |
-| Mutter M12 × 1,5 (Kunststoff), falls beim Druckausgleich keine dabei ist | 1 | | |
 | ASA, schwarz | ≈ 100 g | | |
 
 Wer mehrere Sensoren baut, braucht alles außer den Leiterplatten und dem ZH-Set entsprechend öfter. Pro weiterem Sensor kommen so rund 50 € dazu. Die Messmodule sollten dann aus derselben Charge stammen (siehe [Abgleich](#abgleich)).
@@ -297,12 +298,12 @@ Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch,
 ## Aufbau und Montage
 
 1. Funkmodul und die drei Buchsen auf die bestückte Platine löten und auf Kurzschluss prüfen (siehe [oben](#funkmodul-und-buchsen-auflöten)).
-2. Gewindeeinsätze einschmelzen: acht M3 von unten in den Deckel.
+2. Gewindeeinsätze einschmelzen: acht von unten in den Deckel, zwei bündig in die Platinenhalter im Unterteil.
 3. Druckausgleichselement von außen in die Bodentasche setzen und innen mit der Mutter kontern.
 4. Dichtstoff auf den Klebering geben, die Kabel der Solarmodule durch die Fenster im Deckel fädeln und die Module in die Tasche drücken, bis sie auf den Abstandsnoppen aufliegen und zwischen den Positionsnoppen sitzen. Das Messmodul markieren.
 5. Die Fugen um die Module umlaufend mit dem Kleber versiegeln. Die Module sind auf FR-4 laminiert, die offene Kante ist die Schwachstelle.
-6. **Polung der Modulstecker prüfen:** Rot (Plus) muss auf die Seite mit dem „+“ auf der Platine. Falls nicht, lassen sich die Kontakte aus dem ZH-Gehäuse lösen und tauschen (Lasche mit einer Nadel anheben). Verpolt geht nichts kaputt, der Sensor misst und lädt dann nur nicht.
-7. Messmodul in J2, Versorgungsmodul in J1. Ein ZH-Kabel an den Superkondensator löten (Rot an Plus, Schrumpfschlauch) und in J3 stecken. Alternativ den Kondensator direkt auf die Platine löten: J3 dann nicht bestücken und die Kondensatordrähte, falls nötig mit zwei Litzen verlängert, in die Lötaugen von J3 löten, Plus ans eckige Pad. Der Kondensator lässt sich dann allerdings nicht mehr abziehen.
+6. **Polung der Modulstecker prüfen:** Der Draht an Plus des Moduls muss auf die Seite mit dem „+“ auf der Platine (eckiges Pad, Pin 1). Beim ersten Aufbau war es andersherum: Rot ist am Modul Plus, liegt im ZH-Stecker aber auf Pin 2 (−). Die Kontakte der Nachbau-Stecker ließen sich nicht zerstörungsfrei aus dem Gehäuse lösen, darum die beiden Drähte an den Lötpunkten des Moduls tauschen. Rot ist dann Minus: Kabel oder Stecker markieren. Verpolt geht an J1 und J2 nichts kaputt, R2 und R3 begrenzen den Strom; der Sensor misst und lädt dann nur nicht.
+7. Messmodul in J2, Versorgungsmodul in J1. Ein ZH-Kabel an den Superkondensator löten (Schrumpfschlauch) und in J3 stecken. Die Kondensatordrähte vorher auf 3 mm kürzen, damit die Schrumpfschläuche an der Stirnseite anliegen, und das Kabel auf 7–8 cm; es läuft im Bogen über J4 zur Buchse. **Hier zählt der Pin, nicht die Farbe:** Der Draht, der im Stecker auf Pin 1 („+“) landet, kommt an Plus des Kondensators. Beim ZH-Set des ersten Aufbaus sitzt Rot wie bei den Modulen auf Pin 2, dort gehört also **Schwarz an Plus**. Vor dem Löten mit dem Durchgangsprüfer zwischen Stecker in J3 und Kabelende nachmessen. Verpolt würde der Kondensator über D1 rückwärts geladen und nimmt Schaden. Alternativ den Kondensator direkt auf die Platine löten: J3 dann nicht bestücken und die Kondensatordrähte, falls nötig mit zwei Litzen verlängert, in die Lötaugen von J3 löten, Plus ans eckige Pad. Der Kondensator lässt sich dann allerdings nicht mehr abziehen.
 8. Platine mit der Antennenkante schräg in die Schlitze schieben, ablegen, unten mit zwei M3 × 6 festschrauben. Kondensator in die Klammern drücken.
 9. O-Ring in die Nut legen, Deckel aufsetzen und mit acht M3 × 30 von unten gleichmäßig anziehen, bis er rundum aufliegt.
 10. Den Sensor an die obere Langkante des quer verbauten Paneels setzen (bei hochkant verbauten seitlich ans obere Montageloch): Wand am Rahmen, Lasche hinten am Fußflansch, Langloch über dem Montageloch im Rahmenflansch. Die M6 × 16 von innen durch den Flansch stecken (Kopf zwischen Flansch und Paneel), hinten Karosseriescheibe und Sicherungsmutter, nur mäßig anziehen – auch ASA gibt unter zu viel Druck auf Dauer nach. Nicht in den Rahmen bohren.
@@ -312,8 +313,8 @@ Dazu aus der Bastelkiste: Lötzinn, Flussmittel, Entlötlitze, Schrumpfschlauch,
 Folgendes ist bisher nur aus Datenblättern und Quelltext abgeleitet. Deshalb zuerst **ein** Exemplar bauen und in Betrieb nehmen:
 
 - **Bestückung:** Sitzen D1 und D2 richtig herum? Höchstens 4,9 V am Kondensator, 3,3 V an J4?
-- **Stecker:** Passen die Modulstecker in die ZH-Buchsen, und auf welcher Seite liegt Rot?
-- **Gehäuse:** Module (70,2 × 70,2 × 1,8 mm) und Kondensator (22,8 × 25,6 × 13,0 mm) sind nachgemessen und eingetragen, ebenso das Druckausgleichselement (Sechskantkopf SW 16,8 × 8,2 mm, Gewinde 10 mm, Belüftungsschlitze in der Kopfmitte frei vom 3 mm tiefen Sechskantsitz). Gegenmutter gemessen (5,1 mm hoch), der O-Ring des Elements liegt in einer Nut im Kopf. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht?
+- **Stecker:** Passen die Modulstecker in die ZH-Buchsen? (Rot liegt bei Modulen und ZH-Set auf Pin 2, siehe Aufbau Schritt 6 und 7.)
+- **Gehäuse:** Module (70,2 × 70,2 × 1,8 mm) und Kondensator (22,8 × 25,6 × 13,0 mm) sind nachgemessen und eingetragen, ebenso das Druckausgleichselement (Sechskantkopf SW 16,8 × 8,2 mm, Gewinde 10 mm, Belüftungsschlitze in der Kopfmitte frei vom 3 mm tiefen Sechskantsitz). Gegenmutter gemessen (5,1 mm hoch), der O-Ring des Elements liegt in einer Nut im Kopf. Der Grund dieser Tasche wird als Brücke gedruckt: Liegt der Dichtring des Elements dort sauber an? Bleibt das Gehäuse unter der Brause dicht? Die Mindesttiefe der RX-M3x4.0 SHORT (etwa 5 mm) ist nur vermutet: am Probedruck prüfen, ob ein Einsatz im 6 mm tiefen Loch des Deckels bündig sitzt.
 - **Befestigung:** Passt das Paneel zum Datenblatt JAM60D41 (Rahmen 30 mm hoch, Flansch 28 mm), trifft das Langloch das Montageloch, liegt der Deckel bündig? Die Flanschdicke ist aus der maßstabsgetreuen Profilzeichnung im Datenblatt ausgemessen (≈ 1,7 mm), M6 × 16 reicht bis etwa 4 mm.
 - **Empfang:** Hört ein Bluetooth-Proxy den Sensor am Montageort zuverlässig?
 - **Nacht:** Wie weit sinkt die Kondensatorspannung bis zum Morgen (Leckstrom)?
@@ -381,8 +382,8 @@ Beide nutzen das europäische Band für Kurzstreckenfunk (863–870 MHz). Das du
 │   ├── drc.json                    Ergebnis der Entwurfsregelprüfung
 │   └── Bilder/
 ├── Einstrahlungssensor-Gehäuse/
-│   ├── erzeuge_gehaeuse.py         parametrisches Gehäuse (FreeCAD)
-│   ├── gehaeuse-unterteil.stl/.step, gehaeuse-deckel.stl/.step
+│   ├── gehaeuse-unterteil.stl/.step, gehaeuse-deckel.stl/.step   aus SolidCraft
+│   ├── erzeuge_gehaeuse.py         parametrisches Gehäuse (FreeCAD, älterer Stand)
 │   ├── pruefe_gehaeuse.py          Passungsprüfung
 │   ├── vorschau.py                 Vorschaubilder ohne OpenGL
 │   ├── beschrifte_montagebild.py   Pfeil und Text ins Montagebild
