@@ -21,3 +21,10 @@ einstrahlungssensor.html
 Teileliste.html
 PV Bauteil Maße.xlsx
 Einstrahlungssensor-Platine/* Kopie.csv
+
+# Vorsorge: Geheimnisse und lokale Claude-Einstellungen nie veröffentlichen
+.env
+.env.*
+*.key
+*.pem
+.claude/settings.local.json
