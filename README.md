@@ -223,15 +223,31 @@ Zum Anschauen gibt es die Baugruppe als FreeCAD-Datei: `Gehäuse mit Einbauteile
 
 Espruino misst relativ zur Betriebsspannung. Das Programm rechnet deshalb mit `E.getAnalogVRef()` in Volt zurück. Für die anderen Sensoren änderst du nur `NAME` in der ersten Zeile.
 
-**Espruino einmalig aufspielen.** Das nackte MDBT42Q kommt vom Distributor ohne Firmware. Espruino kommt deshalb einmal per SWD über J4 darauf, als Programmer dient ein Raspberry Pi Pico mit der Firmware [debugprobe](https://github.com/raspberrypi/debugprobe) (UF2-Datei per Drag-and-drop):
+**Espruino einmalig aufspielen.** Das nackte MDBT42Q kommt vom Distributor ohne Espruino (beim ersten Aufbau lag eine Testfirmware von Raytac darauf). Espruino kommt deshalb einmal per SWD über J4 darauf, als Programmer dient ein Raspberry Pi Pico mit der Firmware [debugprobe](https://github.com/raspberrypi/debugprobe) (`debugprobe_on_pico.uf2` bei gedrückter BOOTSEL-Taste auf das Laufwerk `RPI-RP2` kopieren). Auf dem Rechner genügt OpenOCD 0.12 (`sudo apt install openocd`).
 
-1. Verdrahtung Pico → J4: GP2 → SWDCLK, GP3 → SWDIO, GND → GND. Solange der Superkondensator noch nicht eingesteckt ist, darf der Pico die Platine über 3V3 versorgen. Mit eingestecktem, geladenem Kondensator 3V3 **nicht** verbinden, sonst fließt Strom rückwärts durch den XC6206.
-2. Neue nRF52 sind oft per APPROTECT gesperrt. Erst entsperren (löscht den Chip):
-   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "init; nrf52_recover; exit"`
-3. Die `.hex`-Datei für das MDBT42Q von [espruino.com/Download](https://www.espruino.com/Download) aufspielen:
-   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "program <datei>.hex verify reset exit"`
+1. Verdrahtung Pico → J4 (Pin-Nummern am Pico-Gehäuse):
 
-Ein ST-Link reicht dafür nicht: Er kann einen gesperrten nRF52 nicht entsperren. Der Pico bringt mit debugprobe außerdem eine serielle Schnittstelle mit (GP4 → RX, GP5 ← TX an J4), für die Espruino-Konsole mit 9600 Bd. Wer Espruino auf fremder Hardware nutzt, freut sich das Projekt über eine Spende.
+   | J4 | Pico |
+   |---|---|
+   | GND | GND, z. B. Pin 3 oder 8 |
+   | 3V3 | 3V3 OUT, Pin 36 (nicht 3V3_EN, Pin 37) |
+   | DIO (SWDIO) | GP3, Pin 5 |
+   | CLK (SWDCLK) | GP2, Pin 4 |
+   | RX | GP4, Pin 6 (nur für die Konsole) |
+   | TX | GP5, Pin 7 (nur für die Konsole) |
+
+   Die drei Pads DIO/GND/CLK an der Schmalseite des Pico bleiben frei, das ist dessen eigener Debug-Anschluss. Solange der Superkondensator nicht eingesteckt ist, darf der Pico die Platine über 3V3 versorgen. Mit eingestecktem, geladenem Kondensator 3V3 **nicht** verbinden, sonst fließt Strom rückwärts durch den XC6206. J1 bis J3 beim Flashen am besten ganz abziehen.
+2. Zwei Dateien von [espruino.com/binaries](https://www.espruino.com/binaries/) holen. Ein vollständiges Abbild mit SoftDevice und Bootloader gibt es für das MDBT42Q nur als `espruino_2v00_mdbt42q.hex`, neuere Versionen nur als Update-Paket, z. B. `espruino_2v29_mdbt42q.zip` (November 2026). Aus der zip wird nur `espruino_2v29_mdbt42q_app.bin` gebraucht.
+3. Chip löschen, das 2v00-Abbild aufspielen und die Debug-Sperre ausgeschaltet lassen:
+   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "init" -c "reset halt" -c "nrf5 mass_erase" -c "program espruino_2v00_mdbt42q.hex verify" -c "flash fillw 0x10001208 0x0000005A 1" -c "reset run" -c "exit"`
+4. Die aktuelle Version darüberschreiben, an die Startadresse der Anwendung:
+   `openocd -f interface/cmsis-dap.cfg -f target/nrf52.cfg -c "init" -c "reset halt" -c "program espruino_2v29_mdbt42q_app.bin 0x1f000 verify" -c "reset run" -c "exit"`
+
+Beide Schritte müssen mit `** Verified OK **` enden. Danach meldet sich das Modul in der Konsole mit `print(process.version)` und per Bluetooth als „MDBT42Q xxxx“ (die letzten vier Stellen der Bluetooth-Adresse).
+
+Zu Schritt 3: Neuere nRF52832 sperren den Debug-Zugang (APPROTECT) nach jedem Reset von selbst, außer im UICR steht an `0x10001208` der Wert `0x5A`. Ab Werk stand er beim ersten Aufbau schon dort, `nrf5 mass_erase` löscht ihn aber. Mit dem Wert bleibt der Chip jederzeit wieder per SWD erreichbar. Bei älteren Chip-Revisionen bedeutet jeder Wert außer `0xFF` dagegen „gesperrt“. Dort die `fillw`-Zeile weglassen. Ob der Chip neu ist, zeigt vor dem Löschen `-c "init" -c "mdw 0x10001208 1" -c "exit"`: Steht dort `0000005a` und die Abfrage gelingt, ist es die neue Revision. Ein gesperrter Chip lässt sich mit `-c "init; nrf52_recover; exit"` entsperren, das löscht ihn ebenfalls.
+
+Ein ST-Link reicht dafür nicht: Er kann einen gesperrten nRF52 nicht entsperren. Der Pico bringt mit debugprobe außerdem eine serielle Schnittstelle mit (unter Linux `/dev/ttyACM0`), für die Espruino-Konsole mit 9600 Bd. Spätere Espruino-Updates gehen auch ohne Kabel per Bluetooth über das Update-Paket. Wer Espruino auf fremder Hardware nutzt, freut sich das Projekt über eine Spende.
 
 **Programm aufspielen** (per Bluetooth, auch wenn der Sensor schon montiert ist):
 
@@ -277,7 +293,7 @@ Für einen Sensor, Preise vom November 2026 inklusive Mehrwertsteuer, ohne Versa
 
 | Teil | Menge | ca. Preis | Bezug |
 |---|---|---|---|
-| Funkmodul Raytac MDBT42Q-512KV2 (nRF52832, 512 KB, Keramikantenne), ohne Firmware | 1 | ≈ 6 € | z. B. [TME](https://www.tme.eu/de/details/mdbt42q-512kv2/iot-wifi-bluetooth-modules/raytac/); nicht das MDBT42Q-PAT (nRF52810, kein Espruino). Der Espruino-Shop hatte das nackte Modul im November 2026 nicht mehr, nur das Breakout, das nicht auf die Platine passt |
+| Funkmodul Raytac MDBT42Q-512KV2 (nRF52832, 512 KB, Keramikantenne), ohne Espruino | 1 | ≈ 6 € | z. B. [TME](https://www.tme.eu/de/details/mdbt42q-512kv2/iot-wifi-bluetooth-modules/raytac/); nicht das MDBT42Q-PAT (nRF52810, kein Espruino). Der Espruino-Shop hatte das nackte Modul im November 2026 nicht mehr, nur das Breakout, das nicht auf die Platine passt |
 | Raspberry Pi Pico (H) als SWD-Programmer, einmalig für alle Sensoren | 1 | ≈ 5–10 € | |
 | Leiterplatten, bestückt (JLCPCB fertigt mindestens 5) | 5 | ≈ 23 $ für alle fünf bestückt, mit Versand und Einfuhrabgaben nach Deutschland und Neukunden-Gutschein (November 2026) | JLCPCB |
 | ZH-1,5-Set: 2-polige Stecker mit Kabel und stehende Platinenbuchsen (Buchsen für J1–J3, ein Kabel für J3) | 1 Packung | ≈ 8 € | z. B. Amazon (Nachbau, Passung zu den Modulsteckern prüfen) |
