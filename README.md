@@ -40,15 +40,16 @@ Eine PV-Anlage mit Speicher regelt ab, sobald der Akku voll ist und im Haus weni
 
 Der Sensor misst diese Größe direkt. Weil er in derselben Ebene wie das Paneel sitzt, sieht er dieselbe Einstrahlung, also Sonnenstand, Neigung, Ausrichtung und Wolken genauso wie das große Modul.
 
-Für die eigene Anlage sind **drei** Sensoren vorgesehen, je einer pro Fläche:
+Für die eigene Anlage sind **vier** Sensoren vorgesehen, einer pro Paneel:
 
-| Sensor  | Paneele | Azimut | Neigung zur Waagerechten |
-|---------|---------|--------|--------------------------|
-| Süd     | 1 und 2 | 180°   | 55°                      |
-| Südwest | 4       | 236°   | 65°                      |
-| West    | 3       | 260°   | 65°                      |
+| Sensor  | Paneel | Azimut | Neigung zur Waagerechten |
+|---------|--------|--------|--------------------------|
+| Süd 1   | 1      | 180°   | 55°                      |
+| Süd 2   | 2      | 180°   | 55°                      |
+| Südwest | 4      | 236°   | 65°                      |
+| West    | 3      | 260°   | 65°                      |
 
-Ein einziger Sensor und eine Umrechnung über die Geometrie hätten nicht genügt: Paneel 3 und 4 sind gleich steil, zeigen aber 24° auseinander, und das Verhältnis ihrer Erträge schwankte im Herbst zwischen 1,2 und 3,2.
+Ein einziger Sensor und eine Umrechnung über die Geometrie hätten nicht genügt: Paneel 3 und 4 sind gleich steil, zeigen aber 24° auseinander, und das Verhältnis ihrer Erträge schwankte im Herbst zwischen 1,2 und 3,2. Paneel 1 und 2 liegen in derselben Ebene und sollten sich ursprünglich einen Sensor teilen; seit November 2026 bekommen auch sie je einen eigenen.
 
 ## Funktionsprinzip
 
